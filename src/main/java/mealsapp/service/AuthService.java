@@ -1,7 +1,6 @@
 package mealsapp.service;
 
 import lombok.AllArgsConstructor;
-import mealsapp.controller.AuthController;
 import mealsapp.dto.RegisterRequest;
 import mealsapp.mail.MailService;
 import mealsapp.model.NotificationEmail;
@@ -20,10 +19,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AuthService {
 
-    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
