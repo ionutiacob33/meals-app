@@ -17,12 +17,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors().and()
+    public void configure(HttpSecurity http) throws Exception {
+        http
+                .cors().and()
                 .csrf().disable()
-                .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/api/auth/**")
-                        .permitAll());
+                .authorizeHttpRequests()
+                    .antMatchers("/api/auth/**").permitAll();
     }
 
     @Override

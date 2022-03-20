@@ -25,7 +25,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void signup(RegisterRequest registerRequest) {
+    public boolean signup(RegisterRequest registerRequest) {
+        if (!isUsernameUnique(registerRequest.getUsername())) {
+            return false;
+        }
+
+        if (!isEmailUnique(registerRequest.getEmail())) {
+            return false;
+        }
+
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
@@ -43,6 +51,8 @@ public class AuthService {
                         "please click on the below url to activate your account : " +
                         "http://localhost:8080/api/auth/accountVerification/" + token
         ));
+
+        return true;
     }
 
     private String generateVerificationToken(User user) {
@@ -54,4 +64,13 @@ public class AuthService {
         verificationTokenRepository.save(verificationToken);
         return token;
     }
+
+    private boolean isUsernameUnique(String username) {
+        return userRepository.findByUsername(username).isEmpty();
+    }
+
+    private boolean isEmailUnique(String email) {
+        return userRepository.findByEmail(email).isEmpty();
+    }
+
 }
