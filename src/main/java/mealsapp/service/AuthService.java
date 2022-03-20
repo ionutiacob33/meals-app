@@ -2,6 +2,8 @@ package mealsapp.service;
 
 import lombok.AllArgsConstructor;
 import mealsapp.dto.RegisterRequest;
+import mealsapp.error.EmailAlreadyExistsException;
+import mealsapp.error.UsernameAlreadyExistsException;
 import mealsapp.mail.MailService;
 import mealsapp.model.NotificationEmail;
 import mealsapp.model.User;
@@ -25,13 +27,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public boolean signup(RegisterRequest registerRequest) {
+    public boolean signup(RegisterRequest registerRequest) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
         if (!isUsernameUnique(registerRequest.getUsername())) {
-            return false;
+            throw new UsernameAlreadyExistsException();
         }
 
         if (!isEmailUnique(registerRequest.getEmail())) {
-            return false;
+            throw new EmailAlreadyExistsException();
         }
 
         User user = new User();
