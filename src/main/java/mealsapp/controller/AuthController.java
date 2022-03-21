@@ -6,10 +6,7 @@ import mealsapp.model.Response;
 import mealsapp.model.User;
 import mealsapp.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -31,6 +28,20 @@ public class AuthController {
                         .timeStamp(now())
                         .data(Map.of("user", user))
                         .message("User created successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
+    @GetMapping("/accountVerification/{token}")
+    public ResponseEntity<Response> verifyToken(@PathVariable String token) {
+        authService.verifyAccount(token);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("token", token))
+                        .message("User activated successfully")
                         .status(OK)
                         .statusCode(OK.value())
                         .build()

@@ -3,6 +3,7 @@ package mealsapp.service;
 import lombok.AllArgsConstructor;
 import mealsapp.dto.RegisterRequest;
 import mealsapp.error.ExistingFieldException;
+import mealsapp.error.FieldNotFoundException;
 import mealsapp.mail.MailService;
 import mealsapp.model.NotificationEmail;
 import mealsapp.model.User;
@@ -14,10 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -25,7 +28,6 @@ public class AuthService {
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public User signup(RegisterRequest registerRequest) throws ExistingFieldException {
         if (!isUsernameUnique(registerRequest.getUsername())) {
             throw new ExistingFieldException("Username already exists");
@@ -54,6 +56,19 @@ public class AuthService {
         ));
 
         return user;
+    }
+
+    public void verifyAccount(String token) {
+        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
+        verificationToken.orElseThrow(() -> new FieldNotFoundException("Token not found"));
+        fetchUserAndEnable(verificationToken.get());
+    }
+
+    private void fetchUserAndEnable(VerificationToken verificationToken) {
+        String username = verificationToken.getUser().getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new FieldNotFoundException("User not found with name - " + username));
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 
     private String generateVerificationToken(User user) {
