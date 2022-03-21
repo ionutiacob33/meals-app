@@ -27,7 +27,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public boolean signup(RegisterRequest registerRequest) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
+    public User signup(RegisterRequest registerRequest) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
         if (!isUsernameUnique(registerRequest.getUsername())) {
             throw new UsernameAlreadyExistsException();
         }
@@ -54,7 +54,7 @@ public class AuthService {
                         "http://localhost:8080/api/auth/accountVerification/" + token
         ));
 
-        return true;
+        return user;
     }
 
     private String generateVerificationToken(User user) {
