@@ -12,24 +12,12 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 @ControllerAdvice
 public class ErrorHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<Response> handleUsernameConflict(final RuntimeException ex) {
+    @ExceptionHandler(ExistingFieldException.class)
+    public ResponseEntity<Response> handleFieldConflict(final RuntimeException ex) {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .message("Username already exists")
-                        .status(CONFLICT)
-                        .statusCode(CONFLICT.value())
-                        .build()
-        );
-    }
-
-    @ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<Response> handleEmailConflict(final RuntimeException ex) {
-        return ResponseEntity.ok(
-                Response.builder()
-                        .timeStamp(now())
-                        .message("Email already exists")
+                        .message(ex.getMessage())
                         .status(CONFLICT)
                         .statusCode(CONFLICT.value())
                         .build()
