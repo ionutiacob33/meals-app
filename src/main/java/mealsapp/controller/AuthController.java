@@ -1,6 +1,7 @@
 package mealsapp.controller;
 
 import lombok.AllArgsConstructor;
+import mealsapp.dto.LoginRequest;
 import mealsapp.dto.RegisterRequest;
 import mealsapp.model.Response;
 import mealsapp.model.User;
@@ -47,5 +48,19 @@ public class AuthController {
                         .build()
         );
     }
+
+//    @PostMapping("/login")
+//    public ResponseEntity<Response> login(@RequestBody LoginRequest loginRequest) {
+//        String loggedInUser = loginRequest.getUsername();
+//        return ResponseEntity.ok(
+//                Response.builder()
+//                        .timeStamp(now())
+//                        .data(Map.of("loggedInUser", loggedInUser))
+//                        .message("User logged in successfully")
+//                        .status(OK)
+//                        .statusCode(OK.value())
+//                        .build()
+//        );
+//    }
 
 }

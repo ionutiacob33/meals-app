@@ -1,6 +1,7 @@
 package mealsapp.service;
 
 import lombok.AllArgsConstructor;
+import mealsapp.dto.LoginRequest;
 import mealsapp.dto.RegisterRequest;
 import mealsapp.error.ExistingFieldException;
 import mealsapp.error.FieldNotFoundException;
@@ -10,6 +11,10 @@ import mealsapp.model.User;
 import mealsapp.model.VerificationToken;
 import mealsapp.repository.UserRepository;
 import mealsapp.repository.VerificationTokenRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +68,12 @@ public class AuthService {
         verificationToken.orElseThrow(() -> new FieldNotFoundException("Token not found"));
         fetchUserAndEnable(verificationToken.get());
     }
+
+//    public String login(LoginRequest loginRequest) {
+//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        return SecurityContextHolder.getContext().getAuthentication().getName();
+//    }
 
     private void fetchUserAndEnable(VerificationToken verificationToken) {
         String username = verificationToken.getUser().getUsername();
