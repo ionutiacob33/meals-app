@@ -69,12 +69,6 @@ public class AuthService {
         fetchUserAndEnable(verificationToken.get());
     }
 
-//    public String login(LoginRequest loginRequest) {
-//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        return SecurityContextHolder.getContext().getAuthentication().getName();
-//    }
-
     private void fetchUserAndEnable(VerificationToken verificationToken) {
         String username = verificationToken.getUser().getUsername();
         User user = userRepository.findByUsername(username).orElseThrow(() -> new FieldNotFoundException("User not found with name - " + username));
