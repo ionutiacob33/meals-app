@@ -22,7 +22,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private Long userId;
 
     @NotBlank(message = "Username is required")
     private String username;
