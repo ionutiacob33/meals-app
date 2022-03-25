@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Transactional
 public class RecipeService {
+
     private final RecipeRepository recipeRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final IngredientRepository ingredientRepository;
@@ -34,7 +35,24 @@ public class RecipeService {
         return recipe;
     }
 
-    private List<RecipeIngredient> mapRecipeIngredientsDto(ArrayList<RecipeIngredientDto> recipeIngredients, Recipe recipe) {
+    public List<Recipe> getAllRecipes() {
+        return recipeRepository.findAll();
+    }
+
+    public RecipeDto getRecipe(Long id) {
+        RecipeDto detailedRecipe = new RecipeDto();
+        Recipe recipe = recipeRepository.getById(id);
+        detailedRecipe.setTitle(recipe.getTitle());
+        detailedRecipe.setDescription(recipe.getDescription());
+        List<RecipeIngredient> recipeIngredients = recipeIngredientRepository.findByRecipeId(id);
+        List<RecipeIngredientDto> recipeIngredientsDto = recipeIngredients.stream()
+                .map(this::mapToRecipeIngredientDto)
+                .toList();
+        detailedRecipe.setRecipeIngredients(recipeIngredientsDto);
+        return detailedRecipe;
+    }
+
+    private List<RecipeIngredient> mapRecipeIngredientsDto(List<RecipeIngredientDto> recipeIngredients, Recipe recipe) {
         return recipeIngredients.stream()
                 .map(recipeIngredientDto -> mapToRecipeIngredient(recipeIngredientDto, recipe))
                 .collect(Collectors.toList());
@@ -60,6 +78,16 @@ public class RecipeService {
         recipeIngredient.setQuantity(quantity);
 
         return recipeIngredient;
+    }
+
+    private RecipeIngredientDto mapToRecipeIngredientDto(RecipeIngredient recipeIngredient) {
+        RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
+
+        recipeIngredientDto.setIngredient(recipeIngredient.getIngredient().getName());
+        recipeIngredientDto.setUnit(recipeIngredient.getUnit().getName());
+        recipeIngredientDto.setQuantity(recipeIngredient.getQuantity().getAmount());
+
+        return recipeIngredientDto;
     }
 
 }
