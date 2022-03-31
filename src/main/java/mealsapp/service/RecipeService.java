@@ -19,9 +19,9 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
-    private final IngredientRepository ingredientRepository;
-    private final UnitRepository unitRepository;
-    private final QuantityRepository quantityRepository;
+    private final IngredientService ingredientService;
+    private final UnitService unitService;
+    private final QuantityService quantityService;
 
     public Recipe addRecipe(RecipeDto recipeDto) {
         Recipe recipe = new Recipe();
@@ -62,19 +62,13 @@ public class RecipeService {
         RecipeIngredient recipeIngredient = new RecipeIngredient();
         recipeIngredient.setRecipe(recipe);
 
-        Ingredient ingredient = new Ingredient();
-        ingredient.setName(recipeIngredientDto.getIngredient());
-        ingredientRepository.save(ingredient);
+        Ingredient ingredient = ingredientService.addIngredient(recipeIngredientDto.getIngredient());
         recipeIngredient.setIngredient(ingredient);
 
-        Unit unit = new Unit();
-        unit.setName(recipeIngredientDto.getUnit());
-        unitRepository.save(unit);
+        Unit unit = unitService.addUnit(recipeIngredientDto.getUnit());
         recipeIngredient.setUnit(unit);
 
-        Quantity quantity = new Quantity();
-        quantity.setAmount(recipeIngredientDto.getQuantity());
-        quantityRepository.save(quantity);
+        Quantity quantity = quantityService.addQuantity(recipeIngredientDto.getQuantity());
         recipeIngredient.setQuantity(quantity);
 
         return recipeIngredient;
