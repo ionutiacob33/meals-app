@@ -63,4 +63,18 @@ public class RecipeController {
                         .build()
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response> deleteRecipe(@PathVariable Long id) {
+        boolean recipeResult = recipeService.deleteRecipe(id);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("recipeDeleted", recipeResult))
+                        .message("Recipe deleted successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
 }

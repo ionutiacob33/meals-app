@@ -8,7 +8,6 @@ import mealsapp.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
-    private final RecipeIngredientRepository recipeIngredientRepository;
+    private final RecipeIngredientService recipeIngredientService;
     private final IngredientService ingredientService;
     private final UnitService unitService;
     private final QuantityService quantityService;
@@ -30,7 +29,7 @@ public class RecipeService {
 
         recipeRepository.save(recipe);
         List<RecipeIngredient> recipeIngredients = mapRecipeIngredientsDto(recipeDto.getRecipeIngredients(), recipe);
-        recipeIngredientRepository.saveAll(recipeIngredients);
+        recipeIngredientService.add(recipeIngredients);
 
         return recipe;
     }
@@ -44,16 +43,22 @@ public class RecipeService {
         Recipe recipe = recipeRepository.getById(id);
         detailedRecipe.setTitle(recipe.getTitle());
         detailedRecipe.setDescription(recipe.getDescription());
-        List<RecipeIngredient> recipeIngredients = recipeIngredientRepository.findByRecipeId(id);
+        List<RecipeIngredient> recipeIngredients = recipeIngredientService.getByRecipeId(id);
         List<RecipeIngredientDto> recipeIngredientsDto = recipeIngredients.stream()
-                .map(this::mapToRecipeIngredientDto)
+                .map(this::mapRecipeIngredientDto)
                 .toList();
         detailedRecipe.setRecipeIngredients(recipeIngredientsDto);
         return detailedRecipe;
     }
 
-    private List<RecipeIngredient> mapRecipeIngredientsDto(List<RecipeIngredientDto> recipeIngredients, Recipe recipe) {
-        return recipeIngredients.stream()
+    public boolean deleteRecipe(Long id) {
+        recipeIngredientService.deleteByRecipeId(id);
+        recipeRepository.deleteById(id);
+        return true;
+    }
+
+    private List<RecipeIngredient> mapRecipeIngredientsDto(List<RecipeIngredientDto> recipeIngredientDtos, Recipe recipe) {
+        return recipeIngredientDtos.stream()
                 .map(recipeIngredientDto -> mapToRecipeIngredient(recipeIngredientDto, recipe))
                 .collect(Collectors.toList());
     }
@@ -74,7 +79,7 @@ public class RecipeService {
         return recipeIngredient;
     }
 
-    private RecipeIngredientDto mapToRecipeIngredientDto(RecipeIngredient recipeIngredient) {
+    private RecipeIngredientDto mapRecipeIngredientDto(RecipeIngredient recipeIngredient) {
         RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
 
         recipeIngredientDto.setIngredient(recipeIngredient.getIngredient().getName());
