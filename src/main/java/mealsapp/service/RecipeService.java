@@ -34,6 +34,19 @@ public class RecipeService {
         return recipe;
     }
 
+    public Recipe updateRecipe(Long recipeId, RecipeDto recipeDto) {
+        Recipe recipe = recipeRepository.getById(recipeId);
+        recipe.setTitle(recipeDto.getTitle());
+        recipe.setDescription(recipeDto.getDescription());
+        recipeRepository.save(recipe);
+        recipeIngredientService.deleteByRecipeId(recipeId);
+
+        List<RecipeIngredient> recipeIngredients = mapRecipeIngredientsDto(recipeDto.getRecipeIngredients(), recipe);
+        recipeIngredientService.add(recipeIngredients);
+
+        return recipe;
+    }
+
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }

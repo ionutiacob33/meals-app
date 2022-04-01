@@ -36,6 +36,20 @@ public class RecipeController {
         );
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Response> updateRecipe(@RequestBody RecipeDto recipeDto, @PathVariable Long id) {
+        Recipe recipe = recipeService.updateRecipe(id, recipeDto);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("recipe", recipe))
+                        .message("Recipe updated successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
     @GetMapping
     public ResponseEntity<Response> getRecipes() {
         List<Recipe> recipes = recipeService.getAllRecipes();
