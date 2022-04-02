@@ -49,18 +49,4 @@ public class AuthController {
         );
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<Response> login(@RequestBody LoginRequest loginRequest) {
-//        String loggedInUser = loginRequest.getUsername();
-//        return ResponseEntity.ok(
-//                Response.builder()
-//                        .timeStamp(now())
-//                        .data(Map.of("loggedInUser", loggedInUser))
-//                        .message("User logged in successfully")
-//                        .status(OK)
-//                        .statusCode(OK.value())
-//                        .build()
-//        );
-//    }
-
 }

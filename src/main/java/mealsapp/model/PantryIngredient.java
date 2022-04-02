@@ -13,15 +13,15 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeIngredient {
+public class PantryIngredient {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "recipe_id", referencedColumnName = "id")
-    private Recipe recipe;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
