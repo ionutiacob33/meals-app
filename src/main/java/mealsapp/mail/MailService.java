@@ -2,7 +2,7 @@ package mealsapp.mail;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mealsapp.exceptions.GenericException;
+import mealsapp.error.GenericException;
 import mealsapp.model.NotificationEmail;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;

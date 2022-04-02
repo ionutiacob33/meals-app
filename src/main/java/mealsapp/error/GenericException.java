@@ -1,4 +1,4 @@
-package mealsapp.exceptions;
+package mealsapp.error;
 
 public class GenericException extends RuntimeException {
     public GenericException(String exMessage, Exception exception) {

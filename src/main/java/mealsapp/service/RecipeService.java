@@ -8,7 +8,6 @@ import mealsapp.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +17,10 @@ import java.util.stream.Collectors;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
-    private final RecipeIngredientRepository recipeIngredientRepository;
-    private final IngredientRepository ingredientRepository;
-    private final UnitRepository unitRepository;
-    private final QuantityRepository quantityRepository;
+    private final RecipeIngredientService recipeIngredientService;
+    private final IngredientService ingredientService;
+    private final UnitService unitService;
+    private final QuantityService quantityService;
 
     public Recipe addRecipe(RecipeDto recipeDto) {
         Recipe recipe = new Recipe();
@@ -30,7 +29,20 @@ public class RecipeService {
 
         recipeRepository.save(recipe);
         List<RecipeIngredient> recipeIngredients = mapRecipeIngredientsDto(recipeDto.getRecipeIngredients(), recipe);
-        recipeIngredientRepository.saveAll(recipeIngredients);
+        recipeIngredientService.add(recipeIngredients);
+
+        return recipe;
+    }
+
+    public Recipe updateRecipe(Long recipeId, RecipeDto recipeDto) {
+        Recipe recipe = recipeRepository.getById(recipeId);
+        recipe.setTitle(recipeDto.getTitle());
+        recipe.setDescription(recipeDto.getDescription());
+        recipeRepository.save(recipe);
+        recipeIngredientService.deleteByRecipeId(recipeId);
+
+        List<RecipeIngredient> recipeIngredients = mapRecipeIngredientsDto(recipeDto.getRecipeIngredients(), recipe);
+        recipeIngredientService.add(recipeIngredients);
 
         return recipe;
     }
@@ -44,16 +56,22 @@ public class RecipeService {
         Recipe recipe = recipeRepository.getById(id);
         detailedRecipe.setTitle(recipe.getTitle());
         detailedRecipe.setDescription(recipe.getDescription());
-        List<RecipeIngredient> recipeIngredients = recipeIngredientRepository.findByRecipeId(id);
+        List<RecipeIngredient> recipeIngredients = recipeIngredientService.getByRecipeId(id);
         List<RecipeIngredientDto> recipeIngredientsDto = recipeIngredients.stream()
-                .map(this::mapToRecipeIngredientDto)
+                .map(this::mapRecipeIngredientDto)
                 .toList();
         detailedRecipe.setRecipeIngredients(recipeIngredientsDto);
         return detailedRecipe;
     }
 
-    private List<RecipeIngredient> mapRecipeIngredientsDto(List<RecipeIngredientDto> recipeIngredients, Recipe recipe) {
-        return recipeIngredients.stream()
+    public boolean deleteRecipe(Long id) {
+        recipeIngredientService.deleteByRecipeId(id);
+        recipeRepository.deleteById(id);
+        return true;
+    }
+
+    private List<RecipeIngredient> mapRecipeIngredientsDto(List<RecipeIngredientDto> recipeIngredientDtos, Recipe recipe) {
+        return recipeIngredientDtos.stream()
                 .map(recipeIngredientDto -> mapToRecipeIngredient(recipeIngredientDto, recipe))
                 .collect(Collectors.toList());
     }
@@ -62,25 +80,19 @@ public class RecipeService {
         RecipeIngredient recipeIngredient = new RecipeIngredient();
         recipeIngredient.setRecipe(recipe);
 
-        Ingredient ingredient = new Ingredient();
-        ingredient.setName(recipeIngredientDto.getIngredient());
-        ingredientRepository.save(ingredient);
+        Ingredient ingredient = ingredientService.addIngredient(recipeIngredientDto.getIngredient());
         recipeIngredient.setIngredient(ingredient);
 
-        Unit unit = new Unit();
-        unit.setName(recipeIngredientDto.getUnit());
-        unitRepository.save(unit);
+        Unit unit = unitService.addUnit(recipeIngredientDto.getUnit());
         recipeIngredient.setUnit(unit);
 
-        Quantity quantity = new Quantity();
-        quantity.setAmount(recipeIngredientDto.getQuantity());
-        quantityRepository.save(quantity);
+        Quantity quantity = quantityService.addQuantity(recipeIngredientDto.getQuantity());
         recipeIngredient.setQuantity(quantity);
 
         return recipeIngredient;
     }
 
-    private RecipeIngredientDto mapToRecipeIngredientDto(RecipeIngredient recipeIngredient) {
+    private RecipeIngredientDto mapRecipeIngredientDto(RecipeIngredient recipeIngredient) {
         RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
 
         recipeIngredientDto.setIngredient(recipeIngredient.getIngredient().getName());
