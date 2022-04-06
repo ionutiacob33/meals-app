@@ -7,10 +7,9 @@ import mealsapp.model.Response;
 import mealsapp.service.PantryIngredientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static java.time.LocalDateTime.now;
@@ -31,6 +30,20 @@ public class PantryController {
                         .timeStamp(now())
                         .data(Map.of("pantryIngredient", pantryIngredient))
                         .message("Ingredient added to the pantry successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<Response> getIngredients(@PathVariable Long userId) {
+        List<PantryIngredientDto> pantryIngredients = pantryIngredientService.getIngredients(userId);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("pantryIngrediens", pantryIngredients))
+                        .message("Pantry ingredients for user " + userId + " retrieved successfully")
                         .status(OK)
                         .statusCode(OK.value())
                         .build()

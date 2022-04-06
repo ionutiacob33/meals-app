@@ -10,6 +10,8 @@ import mealsapp.repository.PantryIngredientRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 @Transactional
@@ -39,4 +41,19 @@ public class PantryIngredientService {
         return pantryIngredientDto;
     }
 
+    public List<PantryIngredientDto> getIngredients(Long userId) {
+        List<PantryIngredient> pantryIngredients = pantryIngredientRepository.findByUserId(userId);
+
+        return pantryIngredients.stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    public PantryIngredientDto mapToDto(PantryIngredient pantryIngredient) {
+        PantryIngredientDto pantryIngredientDto = new PantryIngredientDto();
+        pantryIngredientDto.setIngredient(pantryIngredient.getIngredient().getName());
+        pantryIngredientDto.setUnit(pantryIngredient.getUnit().getName());
+        pantryIngredientDto.setQuantity(pantryIngredient.getQuantity().getAmount());
+        return pantryIngredientDto;
+    }
 }
