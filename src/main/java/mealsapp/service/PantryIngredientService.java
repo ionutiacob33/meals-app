@@ -2,6 +2,7 @@ package mealsapp.service;
 
 import lombok.AllArgsConstructor;
 import mealsapp.dto.PantryIngredientDto;
+import mealsapp.mapper.PantryMapper;
 import mealsapp.model.Ingredient;
 import mealsapp.model.PantryIngredient;
 import mealsapp.model.Quantity;
@@ -18,26 +19,12 @@ import java.util.List;
 public class PantryIngredientService {
 
     private final PantryIngredientRepository pantryIngredientRepository;
-    private final AuthService authService;
-    private final IngredientService ingredientService;
-    private final UnitService unitService;
-    private final QuantityService quantityService;
+    private final PantryMapper pantryMapper;
 
     public PantryIngredientDto addIngredient(PantryIngredientDto pantryIngredientDto) {
-        PantryIngredient pantryIngredient = new PantryIngredient();
-
-        pantryIngredient.setUser(authService.getAuthenticatedUser());
-
-        Ingredient ingredient = ingredientService.addIngredient(pantryIngredientDto.getIngredient());
-        pantryIngredient.setIngredient(ingredient);
-
-        Unit unit = unitService.addUnit(pantryIngredientDto.getUnit());
-        pantryIngredient.setUnit(unit);
-
-        Quantity quantity = quantityService.addQuantity(pantryIngredientDto.getQuantity());
-        pantryIngredient.setQuantity(quantity);
-
+        PantryIngredient pantryIngredient = pantryMapper.mapToModel(pantryIngredientDto);
         pantryIngredientRepository.save(pantryIngredient);
+
         return pantryIngredientDto;
     }
 
@@ -45,15 +32,8 @@ public class PantryIngredientService {
         List<PantryIngredient> pantryIngredients = pantryIngredientRepository.findByUserId(userId);
 
         return pantryIngredients.stream()
-                .map(this::mapToDto)
+                .map(pantryMapper::mapToDto)
                 .toList();
     }
 
-    public PantryIngredientDto mapToDto(PantryIngredient pantryIngredient) {
-        PantryIngredientDto pantryIngredientDto = new PantryIngredientDto();
-        pantryIngredientDto.setIngredient(pantryIngredient.getIngredient().getName());
-        pantryIngredientDto.setUnit(pantryIngredient.getUnit().getName());
-        pantryIngredientDto.setQuantity(pantryIngredient.getQuantity().getAmount());
-        return pantryIngredientDto;
-    }
 }
