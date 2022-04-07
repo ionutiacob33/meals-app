@@ -37,13 +37,13 @@ public class PantryController {
     }
 
     @PutMapping("/{ingrId}")
-    public ResponseEntity<Response> addIngredient(@PathVariable Long ingrId, @RequestBody PantryIngredientDto pantryIngredientDto) {
+    public ResponseEntity<Response> editIngredient(@PathVariable Long ingrId, @RequestBody PantryIngredientDto pantryIngredientDto) {
         PantryIngredientDto pantryIngredient = pantryIngredientService.editIngredient(ingrId, pantryIngredientDto);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
                         .data(Map.of("pantryIngredient", pantryIngredient))
-                        .message("Ingredient added to the pantry successfully")
+                        .message("Ingredient edited successfully")
                         .status(OK)
                         .statusCode(OK.value())
                         .build()
@@ -56,8 +56,21 @@ public class PantryController {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .data(Map.of("pantryIngrediens", pantryIngredients))
+                        .data(Map.of("pantryIngredients", pantryIngredients))
                         .message("Pantry ingredients for user " + userId + " retrieved successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response> deleteIngredient(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("deleteSuccess", pantryIngredientService.deleteIngredient(id)))
+                        .message("Ingredient " + id + " deleted successfully")
                         .status(OK)
                         .statusCode(OK.value())
                         .build()

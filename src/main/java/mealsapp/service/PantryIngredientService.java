@@ -2,6 +2,7 @@ package mealsapp.service;
 
 import lombok.AllArgsConstructor;
 import mealsapp.dto.PantryIngredientDto;
+import mealsapp.error.GenericException;
 import mealsapp.mapper.PantryMapper;
 import mealsapp.model.PantryIngredient;
 import mealsapp.model.Quantity;
@@ -19,6 +20,7 @@ public class PantryIngredientService {
     private final PantryIngredientRepository pantryIngredientRepository;
     private final PantryMapper pantryMapper;
     private final QuantityService quantityService;
+    private final AuthService authService;
 
     public PantryIngredientDto addIngredient(PantryIngredientDto pantryIngredientDto) {
         PantryIngredient pantryIngredientMap = pantryMapper.mapToModel(pantryIngredientDto);
@@ -58,6 +60,17 @@ public class PantryIngredientService {
         return pantryIngredients.stream()
                 .map(pantryMapper::mapToDto)
                 .toList();
+    }
+
+    public boolean deleteIngredient(Long id) {
+        PantryIngredient pantryIngredient = pantryIngredientRepository.getById(id);
+        Long userId = pantryIngredient.getUser().getId();
+        Long authUserId = authService.getAuthenticatedUser().getId();
+        if (userId != authUserId) {
+            throw new GenericException("User can only delete its own pantry ingredients");
+        }
+        pantryIngredientRepository.deleteById(id);
+        return true;
     }
 
 }
