@@ -36,6 +36,20 @@ public class PantryController {
         );
     }
 
+    @PutMapping("/{ingrId}")
+    public ResponseEntity<Response> addIngredient(@PathVariable Long ingrId, @RequestBody PantryIngredientDto pantryIngredientDto) {
+        PantryIngredientDto pantryIngredient = pantryIngredientService.editIngredient(ingrId, pantryIngredientDto);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("pantryIngredient", pantryIngredient))
+                        .message("Ingredient added to the pantry successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<Response> getIngredients(@PathVariable Long userId) {
         List<PantryIngredientDto> pantryIngredients = pantryIngredientService.getIngredients(userId);

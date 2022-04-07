@@ -23,4 +23,11 @@ public class QuantityService {
         return quantity;
     }
 
+    public Quantity incrementQuantity(Quantity quantity, Quantity quantityToAdd) {
+        Quantity returnQuantity = new Quantity();
+        returnQuantity.setAmount(quantity.getAmount() + quantityToAdd.getAmount());
+        quantityRepository.save(returnQuantity);
+
+        return returnQuantity;
+    }
 }

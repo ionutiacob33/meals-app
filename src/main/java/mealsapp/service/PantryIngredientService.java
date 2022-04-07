@@ -3,10 +3,8 @@ package mealsapp.service;
 import lombok.AllArgsConstructor;
 import mealsapp.dto.PantryIngredientDto;
 import mealsapp.mapper.PantryMapper;
-import mealsapp.model.Ingredient;
 import mealsapp.model.PantryIngredient;
 import mealsapp.model.Quantity;
-import mealsapp.model.Unit;
 import mealsapp.repository.PantryIngredientRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +18,35 @@ public class PantryIngredientService {
 
     private final PantryIngredientRepository pantryIngredientRepository;
     private final PantryMapper pantryMapper;
+    private final QuantityService quantityService;
 
     public PantryIngredientDto addIngredient(PantryIngredientDto pantryIngredientDto) {
-        PantryIngredient pantryIngredient = pantryMapper.mapToModel(pantryIngredientDto);
+        PantryIngredient pantryIngredientMap = pantryMapper.mapToModel(pantryIngredientDto);
+        PantryIngredient pantryIngredient = pantryIngredientRepository
+                .findByIngredientAndUnit(pantryIngredientMap.getIngredient(), pantryIngredientMap.getUnit());
+
+        if (pantryIngredient != null) {
+            Quantity quantity = quantityService.incrementQuantity(pantryIngredient.getQuantity(), pantryIngredientMap.getQuantity());
+            pantryIngredient.setQuantity(quantity);
+        } else {
+            pantryIngredient = new PantryIngredient();
+            pantryIngredient.setIngredient(pantryIngredientMap.getIngredient());
+            pantryIngredient.setUnit(pantryIngredientMap.getUnit());
+            pantryIngredient.setQuantity(pantryIngredientMap.getQuantity());
+        }
+        pantryIngredientRepository.save(pantryIngredient);
+
+        return pantryMapper.mapToDto(pantryIngredient);
+    }
+
+    public PantryIngredientDto editIngredient(Long id, PantryIngredientDto pantryIngredientDto) {
+        PantryIngredient pantryIngredient = pantryIngredientRepository.getById(id);
+        PantryIngredient pantryIngredientMap = pantryMapper.mapToModel(pantryIngredientDto);
+
+        pantryIngredient.setIngredient(pantryIngredientMap.getIngredient());
+        pantryIngredient.setUnit(pantryIngredientMap.getUnit());
+        pantryIngredient.setQuantity(pantryIngredientMap.getQuantity());
+
         pantryIngredientRepository.save(pantryIngredient);
 
         return pantryIngredientDto;
