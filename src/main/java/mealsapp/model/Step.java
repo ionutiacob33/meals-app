@@ -1,6 +1,5 @@
 package mealsapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,19 +14,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Recipe {
-
+public class Step {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private String title;
+    private Integer count;
     private String description;
-    private String imageUrl;
-    private Integer calories;
-    private Integer protein;
-    private Integer fat;
-    private Integer carbs;
-
 }
