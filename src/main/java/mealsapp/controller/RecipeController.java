@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import mealsapp.dto.RecipeDto;
 import mealsapp.model.Recipe;
 import mealsapp.model.Response;
-import mealsapp.model.User;
 import mealsapp.service.RecipeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

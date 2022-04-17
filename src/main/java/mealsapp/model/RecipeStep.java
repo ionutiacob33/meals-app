@@ -13,8 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeIngredient {
-
+public class RecipeStep {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -24,15 +23,6 @@ public class RecipeIngredient {
     private Recipe recipe;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
-    private Ingredient ingredient;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "unit_id", referencedColumnName = "id")
-    private Unit unit;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "quantity_id", referencedColumnName = "id")
-    private Quantity quantity;
-
+    @JoinColumn(name = "step_id", referencedColumnName = "id")
+    private Step step;
 }
