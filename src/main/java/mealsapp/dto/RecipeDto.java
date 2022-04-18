@@ -13,4 +13,9 @@ public class RecipeDto {
     private String title;
     private String description;
     private List<RecipeIngredientDto> recipeIngredients;
+    private String imageUrl;
+    private Integer calories;
+    private Integer protein;
+    private Integer fat;
+    private Integer carbs;
 }
