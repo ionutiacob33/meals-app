@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static mealsapp.utils.Constants.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -52,21 +53,21 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET.getBytes());
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 240 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + JWT_EXPIRY_MILLIS))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 480 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRY_MILLIS))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
         Map<String, String> tokens = new HashMap<>();
-        tokens.put("access_token", accessToken);
-        tokens.put("refresh_token", refreshToken);
+        tokens.put(ACCESS_TOKEN_HEADER, accessToken);
+        tokens.put(REFRESH_TOKEN_HEADER, refreshToken);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
