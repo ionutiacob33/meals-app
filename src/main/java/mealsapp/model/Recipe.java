@@ -24,7 +24,6 @@ public class Recipe {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Nullable
     private Long apiId;
     private String title;
     private String description;
