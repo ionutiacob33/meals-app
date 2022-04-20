@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import mealsapp.model.api.recipeSummary.RecipeSummaryResponse;
 import mealsapp.model.api.searchByIngredient.RecipeByIngredientsItem;
 import mealsapp.model.api.searchByName.RecipeByNameResponse;
 import org.springframework.http.HttpEntity;
@@ -27,13 +28,20 @@ public class RecipeSearchService {
 
     public static final String RECIPES_COMPLEX_SEARCH = "/recipes/complexSearch";
     public static final String RECIPES_SEARCH_BY_INGREDIENTS = "/recipes/findByIngredients";
-    public static final Integer LIMIT_NUMBER = 5;
+    public static final Integer LIMIT_NUMBER = 1;
 
     public RecipeByNameResponse getRecipesByName(String searchName) {
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders());
-        String queryUrl = SPOONACULAR_FULL_URL + RECIPES_COMPLEX_SEARCH + "?query=" + searchName + "&number=" + LIMIT_NUMBER.toString();
+        StringBuilder queryUrl = new StringBuilder();
 
-        ResponseEntity<String> response = restTemplate.exchange(queryUrl, GET, entity, String.class);
+        queryUrl.append(SPOONACULAR_FULL_URL)
+                .append(RECIPES_COMPLEX_SEARCH)
+                .append("?query=")
+                .append(searchName)
+                .append("&number=")
+                .append(LIMIT_NUMBER);
+
+        ResponseEntity<String> response = restTemplate.exchange(queryUrl.toString(), GET, entity, String.class);
 
         System.out.println("Result - status ("+ response.getStatusCode() + ") has body: " + response.hasBody());
         if (response.hasBody()) {
@@ -51,8 +59,7 @@ public class RecipeSearchService {
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders());
         StringBuilder queryUrl = new StringBuilder();
 
-        queryUrl
-                .append(SPOONACULAR_FULL_URL)
+        queryUrl.append(SPOONACULAR_FULL_URL)
                 .append(RECIPES_SEARCH_BY_INGREDIENTS)
                 .append("?ingredients=");
         for (int i = 0; i < ingredients.size(); i++) {
@@ -62,7 +69,8 @@ public class RecipeSearchService {
                 queryUrl.append(",+").append(ingredients.get(i));
             }
         }
-        queryUrl.append("&number=").append(LIMIT_NUMBER);
+        queryUrl.append("&number=")
+                .append(LIMIT_NUMBER);
 
         ResponseEntity<String> response = restTemplate.exchange(queryUrl.toString(), GET, entity, String.class);
 
@@ -71,6 +79,29 @@ public class RecipeSearchService {
             System.out.println(response.getBody());
             try {
                 return objectMapper.readValue(response.getBody(), new TypeReference<List<RecipeByIngredientsItem>>() {});
+            } catch (JsonProcessingException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    public RecipeSummaryResponse getRecipeSummary(Long recipeId) {
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders());
+        StringBuilder queryUrl = new StringBuilder();
+
+        queryUrl.append(SPOONACULAR_FULL_URL)
+                .append("/recipes/")
+                .append(recipeId)
+                .append("/summary");
+
+        ResponseEntity<String> response = restTemplate.exchange(queryUrl.toString(), GET, entity, String.class);
+
+        System.out.println("Result - status ("+ response.getStatusCode() + ") has body: " + response.hasBody());
+        if (response.hasBody()) {
+            System.out.println(response.getBody());
+            try {
+                return objectMapper.readValue(response.getBody(), RecipeSummaryResponse.class);
             } catch (JsonProcessingException e) {
                 System.out.println(e.getMessage());
             }
