@@ -2,6 +2,7 @@ package mealsapp.controller;
 
 import lombok.AllArgsConstructor;
 import mealsapp.model.Response;
+import mealsapp.model.api.recipeIntructions.RecipeInstructionsResponse;
 import mealsapp.model.api.recipeSummary.RecipeSummaryResponse;
 import mealsapp.model.api.searchByIngredient.RecipeByIngredientsItem;
 import mealsapp.model.api.searchByIngredient.RecipeByIngredientsRequest;
@@ -25,7 +26,7 @@ public class RecipeSearchController {
     RecipeSearchService recipeSearchService;
 
     @GetMapping("/name")
-    public ResponseEntity<Response> getRecipe(@RequestBody RecipeByNameRequest request) {
+    public ResponseEntity<Response> getRecipesByName(@RequestBody RecipeByNameRequest request) {
         String recipeName = request.getRecipeName();
         String recipeFormat = recipeName.substring(1, recipeName.length() - 1);
         RecipeByNameResponse recipeSearchByNameResponse = recipeSearchService.getRecipesByName(recipeFormat);
@@ -42,7 +43,7 @@ public class RecipeSearchController {
     }
 
     @GetMapping("/ingredient")
-    public ResponseEntity<Response> getRecipe(@RequestBody RecipeByIngredientsRequest request) {
+    public ResponseEntity<Response> getRecipesByIngredients(@RequestBody RecipeByIngredientsRequest request) {
         List<String> ingredients = request.getIngredients();
         List<RecipeByIngredientsItem> recipes = recipeSearchService.getRecipesByIngredients(ingredients);
         return ResponseEntity.ok(
@@ -57,7 +58,7 @@ public class RecipeSearchController {
     }
 
     @GetMapping("/summary/{id}")
-    public ResponseEntity<Response> getRecipe(@PathVariable Long id) {
+    public ResponseEntity<Response> getRecipeSummary(@PathVariable Long id) {
         RecipeSummaryResponse recipeSummary = recipeSearchService.getRecipeSummary(id);
         return ResponseEntity.ok(
                 Response.builder()
@@ -69,5 +70,20 @@ public class RecipeSearchController {
                         .build()
         );
     }
+
+    @GetMapping("/analyzed/{id}")
+    public ResponseEntity<Response> getAnalyzedRecipe(@PathVariable Long id) {
+        List<RecipeInstructionsResponse> recipeInstructions = recipeSearchService.getAnalyzedRecipe(id);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("recipes", recipeInstructions))
+                        .message("Recipe retrieved successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
 
 }
