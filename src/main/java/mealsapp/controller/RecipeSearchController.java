@@ -2,9 +2,11 @@ package mealsapp.controller;
 
 import lombok.AllArgsConstructor;
 import mealsapp.model.Response;
-import mealsapp.model.api.searchByIngredient.RecipeSearchByIngredientItem;
-import mealsapp.model.api.searchByName.RecipeSearchByNameItem;
-import mealsapp.model.api.searchByName.RecipeSearchByNameResponse;
+import mealsapp.model.api.searchByIngredient.RecipeByIngredientsItem;
+import mealsapp.model.api.searchByIngredient.RecipeByIngredientsRequest;
+import mealsapp.model.api.searchByName.RecipeByNameItem;
+import mealsapp.model.api.searchByName.RecipeByNameRequest;
+import mealsapp.model.api.searchByName.RecipeByNameResponse;
 import mealsapp.service.RecipeSearchService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +24,11 @@ public class RecipeSearchController {
     RecipeSearchService recipeSearchService;
 
     @GetMapping("/name")
-    public ResponseEntity<Response> getRecipe(@RequestBody String recipeName) {
+    public ResponseEntity<Response> getRecipe(@RequestBody RecipeByNameRequest request) {
+        String recipeName = request.getRecipeName();
         String recipeFormat = recipeName.substring(1, recipeName.length() - 1);
-        RecipeSearchByNameResponse recipeSearchByNameResponse = recipeSearchService.getRecipesByName(recipeFormat);
-        List<RecipeSearchByNameItem> recipes = recipeSearchByNameResponse.getResults();
+        RecipeByNameResponse recipeSearchByNameResponse = recipeSearchService.getRecipesByName(recipeFormat);
+        List<RecipeByNameItem> recipes = recipeSearchByNameResponse.getResults();
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
@@ -38,8 +41,9 @@ public class RecipeSearchController {
     }
 
     @GetMapping("/ingredient")
-    public ResponseEntity<Response> getRecipe(@RequestBody List<String> ingredients) {
-        List<RecipeSearchByIngredientItem> recipes = recipeSearchService.getRecipesByIngredients(ingredients);
+    public ResponseEntity<Response> getRecipe(@RequestBody RecipeByIngredientsRequest request) {
+        List<String> ingredients = request.getIngredients();
+        List<RecipeByIngredientsItem> recipes = recipeSearchService.getRecipesByIngredients(ingredients);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())

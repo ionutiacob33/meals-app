@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import mealsapp.model.api.searchByIngredient.RecipeSearchByIngredientItem;
-import mealsapp.model.api.searchByName.RecipeSearchByNameResponse;
+import mealsapp.model.api.searchByIngredient.RecipeByIngredientsItem;
+import mealsapp.model.api.searchByName.RecipeByNameResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class RecipeSearchService {
     public static final String RECIPES_SEARCH_BY_INGREDIENTS = "/recipes/findByIngredients";
     public static final Integer LIMIT_NUMBER = 5;
 
-    public RecipeSearchByNameResponse getRecipesByName(String searchName) {
+    public RecipeByNameResponse getRecipesByName(String searchName) {
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders());
         String queryUrl = SPOONACULAR_FULL_URL + RECIPES_COMPLEX_SEARCH + "?query=" + searchName + "&number=" + LIMIT_NUMBER.toString();
 
@@ -39,7 +39,7 @@ public class RecipeSearchService {
         if (response.hasBody()) {
             System.out.println(response.getBody());
             try {
-                return objectMapper.readValue(response.getBody(), RecipeSearchByNameResponse.class);
+                return objectMapper.readValue(response.getBody(), RecipeByNameResponse.class);
             } catch (JsonProcessingException e) {
                 System.out.println(e.getMessage());
             }
@@ -47,7 +47,7 @@ public class RecipeSearchService {
         return null;
     }
 
-    public List<RecipeSearchByIngredientItem> getRecipesByIngredients(List<String> ingredients) {
+    public List<RecipeByIngredientsItem> getRecipesByIngredients(List<String> ingredients) {
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders());
         StringBuilder queryUrl = new StringBuilder();
 
@@ -70,7 +70,7 @@ public class RecipeSearchService {
         if (response.hasBody()) {
             System.out.println(response.getBody());
             try {
-                return objectMapper.readValue(response.getBody(), new TypeReference<List<RecipeSearchByIngredientItem>>() {});
+                return objectMapper.readValue(response.getBody(), new TypeReference<List<RecipeByIngredientsItem>>() {});
             } catch (JsonProcessingException e) {
                 System.out.println(e.getMessage());
             }

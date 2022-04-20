@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeSearchByNameResponse {
-    private List<RecipeSearchByNameItem> results;
+public class RecipeByNameResponse {
+    private List<RecipeByNameItem> results;
     private Integer offset;
     private Integer number;
     private Integer totalResults;

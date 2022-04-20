@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeSearchByIngredientsIngredient {
+public class RecipeByIngredientsIngredient {
     private Integer id;
     private String name;
     private String aisle;

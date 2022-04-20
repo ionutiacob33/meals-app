@@ -9,16 +9,16 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeSearchByIngredientItem {
+public class RecipeByIngredientsItem {
     private Integer id;
     private String title;
     private String image;
     private String imageType;
     private Integer likes;
     private Integer missedIngredientsCount;
-    private List<RecipeSearchByIngredientsIngredient> missedIngredients;
+    private List<RecipeByIngredientsIngredient> missedIngredients;
     private Integer usedIngredientsCount;
-    private List<RecipeSearchByIngredientsIngredient> usedIngredients;
-    private List<RecipeSearchByIngredientsIngredient> unusedIngredients;
+    private List<RecipeByIngredientsIngredient> usedIngredients;
+    private List<RecipeByIngredientsIngredient> unusedIngredients;
 }
 
