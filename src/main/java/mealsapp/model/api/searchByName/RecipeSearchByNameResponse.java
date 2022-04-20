@@ -1,4 +1,4 @@
-package mealsapp.model.api;
+package mealsapp.model.api.searchByName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
