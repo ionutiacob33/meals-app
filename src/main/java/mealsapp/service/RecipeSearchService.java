@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import mealsapp.model.api.recipeDetails.RecipeDetailsResponse;
 import mealsapp.model.api.recipeIntructions.RecipeInstructionsResponse;
 import mealsapp.model.api.recipeSummary.RecipeSummaryResponse;
 import mealsapp.model.api.searchByIngredient.RecipeByIngredientsItem;
@@ -126,6 +127,29 @@ public class RecipeSearchService {
             System.out.println(response.getBody());
             try {
                 return objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+            } catch (JsonProcessingException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    public RecipeDetailsResponse getRecipeDetails(Long recipeId) {
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders());
+        StringBuilder queryUrl = new StringBuilder();
+
+        queryUrl.append(SPOONACULAR_FULL_URL)
+                .append("/recipes/")
+                .append(recipeId)
+                .append("/information?includeNutrition=false");
+
+        ResponseEntity<String> response = restTemplate.exchange(queryUrl.toString(), GET, entity, String.class);
+
+        System.out.println("Result - status ("+ response.getStatusCode() + ") has body: " + response.hasBody());
+        if (response.hasBody()) {
+            System.out.println(response.getBody());
+            try {
+                return objectMapper.readValue(response.getBody(), RecipeDetailsResponse.class);
             } catch (JsonProcessingException e) {
                 System.out.println(e.getMessage());
             }

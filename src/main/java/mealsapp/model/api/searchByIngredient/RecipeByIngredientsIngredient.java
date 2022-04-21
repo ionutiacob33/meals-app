@@ -16,7 +16,7 @@ public class RecipeByIngredientsIngredient {
     private String image;
     private String original;
     private String originalName;
-    private Integer amount;
+    private Double amount;
     private String unit;
     private String unitLong;
     private String unitShort;

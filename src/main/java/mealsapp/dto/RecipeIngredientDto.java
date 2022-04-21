@@ -13,5 +13,5 @@ import mealsapp.model.Unit;
 public class RecipeIngredientDto {
     private String ingredient;
     private String unit;
-    private Integer quantity;
+    private Double quantity;
 }

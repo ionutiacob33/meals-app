@@ -2,6 +2,7 @@ package mealsapp.controller;
 
 import lombok.AllArgsConstructor;
 import mealsapp.model.Response;
+import mealsapp.model.api.recipeDetails.RecipeDetailsResponse;
 import mealsapp.model.api.recipeIntructions.RecipeInstructionsResponse;
 import mealsapp.model.api.recipeSummary.RecipeSummaryResponse;
 import mealsapp.model.api.searchByIngredient.RecipeByIngredientsItem;
@@ -77,7 +78,7 @@ public class RecipeSearchController {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .data(Map.of("recipes", recipeInstructions))
+                        .data(Map.of("analyzedRecipe", recipeInstructions))
                         .message("Recipe retrieved successfully")
                         .status(OK)
                         .statusCode(OK.value())
@@ -85,5 +86,18 @@ public class RecipeSearchController {
         );
     }
 
+    @GetMapping("/information/{id}")
+    public ResponseEntity<Response> getRecipeDetails(@PathVariable Long id) {
+        RecipeDetailsResponse recipeDetails = recipeSearchService.getRecipeDetails(id);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("recipeDetails", recipeDetails))
+                        .message("Recipe retrieved successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
 
 }

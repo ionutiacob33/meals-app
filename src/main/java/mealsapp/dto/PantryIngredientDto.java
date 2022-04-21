@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class PantryIngredientDto {
     private String ingredient;
     private String unit;
-    private Integer quantity;
+    private Double quantity;
 }

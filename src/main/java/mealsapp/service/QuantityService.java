@@ -13,7 +13,7 @@ public class QuantityService {
 
     private final QuantityRepository quantityRepository;
 
-    public Quantity addQuantity(Integer amount) {
+    public Quantity addQuantity(Double amount) {
         Quantity quantity = quantityRepository.findByAmount(amount);
         if (quantity == null) {
             quantity = new Quantity();
