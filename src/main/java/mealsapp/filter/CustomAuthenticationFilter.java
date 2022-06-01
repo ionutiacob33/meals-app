@@ -42,7 +42,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             username = loginRequest.getUsername();
             password = loginRequest.getPassword();
         } catch (IOException e) {
-            throw new GenericException("Auth error");
+            throw new GenericException(e.getMessage());
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
