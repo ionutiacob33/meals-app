@@ -20,5 +20,5 @@ public class Quantity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private Integer amount;
+    private Double amount;
 }
