@@ -46,6 +46,7 @@ public class RecipeMapper {
     public RecipeIngredientDto mapToDto(RecipeIngredient recipeIngredient) {
         RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
 
+        recipeIngredientDto.setId(recipeIngredient.getIngredient().getId());
         recipeIngredientDto.setIngredient(recipeIngredient.getIngredient().getName());
         recipeIngredientDto.setUnit(recipeIngredient.getUnit().getName());
         recipeIngredientDto.setQuantity(recipeIngredient.getQuantity().getAmount());

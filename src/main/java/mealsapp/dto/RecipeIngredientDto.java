@@ -11,6 +11,7 @@ import mealsapp.model.Unit;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecipeIngredientDto {
+    private Long id;
     private String ingredient;
     private String unit;
     private Double quantity;
