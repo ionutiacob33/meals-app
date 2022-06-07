@@ -51,7 +51,7 @@ public class RecipeController {
 
     @GetMapping
     public ResponseEntity<Response> getRecipes() {
-        List<Recipe> recipes = recipeService.getAllRecipes();
+        List<RecipeDto> recipes = recipeService.getAllRecipes();
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
