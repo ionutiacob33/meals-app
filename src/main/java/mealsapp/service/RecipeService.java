@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -45,13 +46,15 @@ public class RecipeService {
         return recipe;
     }
 
-    public List<Recipe> getAllRecipes() {
-        return recipeRepository.findAll();
+    public List<RecipeDto> getAllRecipes() {
+        return recipeRepository.findAll().stream().map(recipe -> getRecipe(recipe.getId())).collect(Collectors.toList());
     }
 
     public RecipeDto getRecipe(Long id) {
         RecipeDto detailedRecipe = new RecipeDto();
         Recipe recipe = recipeRepository.getById(id);
+        detailedRecipe.setId(recipe.getId());
+        detailedRecipe.setApiId(recipe.getApiId());
         detailedRecipe.setTitle(recipe.getTitle());
         detailedRecipe.setDescription(recipe.getDescription());
         List<RecipeIngredient> recipeIngredients = recipeIngredientService.getByRecipeId(id);
