@@ -10,6 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecipeDto {
+    private Long id;
+    private Long apiId;
     private String title;
     private String description;
     private List<RecipeIngredientDto> recipeIngredients;
