@@ -9,6 +9,7 @@ import mealsapp.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,16 @@ public class RecipeService {
         recipeIngredientService.add(recipeIngredients);
 
         return recipe;
+    }
+
+    public List<Recipe> addRecipes(List<RecipeDto> recipeDtos) {
+        List<Recipe> recipes = new ArrayList<>();
+
+        for (RecipeDto recipeDto : recipeDtos) {
+            recipes.add(addRecipe(recipeDto));
+        }
+
+        return recipes;
     }
 
     public Recipe updateRecipe(Long recipeId, RecipeDto recipeDto) {
