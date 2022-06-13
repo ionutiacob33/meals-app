@@ -24,8 +24,17 @@ public class RecipeService {
 
     public Recipe addRecipe(RecipeDto recipeDto) {
         Recipe recipe = new Recipe();
+        if (recipeDto.getId() != null) {
+            recipe.setId(recipeDto.getId());
+        }
         recipe.setTitle(recipeDto.getTitle());
         recipe.setDescription(recipeDto.getDescription());
+        recipe.setImageUrl(recipeDto.getImageUrl());
+        recipe.setApiId(recipeDto.getApiId());
+        recipe.setCalories(recipeDto.getCalories());
+        recipe.setCarbs(recipeDto.getCarbs());
+        recipe.setProtein(recipeDto.getProtein());
+        recipe.setFat(recipeDto.getFat());
 
         recipeRepository.save(recipe);
         List<RecipeIngredient> recipeIngredients = recipeMapper.mapToModel(recipeDto.getRecipeIngredients(), recipe);

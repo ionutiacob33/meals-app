@@ -35,7 +35,7 @@ public class RecipeController {
         );
     }
 
-    @PostMapping("/multiple")
+    @PutMapping("/multiple")
     public ResponseEntity<Response> addRecipes(@RequestBody List<RecipeDto> recipeDtos) {
         List<Recipe> recipes = recipeService.addRecipes(recipeDtos);
         return ResponseEntity.ok(
