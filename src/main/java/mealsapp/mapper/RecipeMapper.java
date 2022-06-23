@@ -30,6 +30,7 @@ public class RecipeMapper {
     public RecipeIngredient createModelFromDto(RecipeIngredientDto recipeIngredientDto, Recipe recipe) {
         RecipeIngredient recipeIngredient = new RecipeIngredient();
         recipeIngredient.setRecipe(recipe);
+        recipeIngredient.setId(recipeIngredientDto.getId());
 
         Ingredient ingredient = ingredientService.addIngredient(recipeIngredientDto.getIngredient());
         recipeIngredient.setIngredient(ingredient);

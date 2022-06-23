@@ -32,6 +32,7 @@ public class PantryMapper {
         PantryIngredient pantryIngredient = new PantryIngredient();
 
         pantryIngredient.setUser(authService.getAuthenticatedUser());
+        pantryIngredient.setId(pantryIngredientDto.getId());
 
         Ingredient ingredient = ingredientService.addIngredient(pantryIngredientDto.getIngredient());
         pantryIngredient.setIngredient(ingredient);
