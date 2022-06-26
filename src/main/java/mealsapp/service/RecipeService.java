@@ -77,6 +77,7 @@ public class RecipeService {
         detailedRecipe.setApiId(recipe.getApiId());
         detailedRecipe.setTitle(recipe.getTitle());
         detailedRecipe.setDescription(recipe.getDescription());
+        detailedRecipe.setImageUrl(recipe.getImageUrl());
         List<RecipeIngredient> recipeIngredients = recipeIngredientService.getByRecipeId(id);
         List<RecipeIngredientDto> recipeIngredientsDto = recipeIngredients.stream()
                 .map(recipeMapper::mapToDto)
