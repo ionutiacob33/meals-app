@@ -77,9 +77,23 @@ public class RecipeController {
         );
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<Response> getRecipesOfCurrentUser() {
+        List<RecipeDto> recipes = recipeService.getRecipesOfCurrentUser();
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("recipes", recipes))
+                        .message("Recipes retrieved successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Response> getRecipeDetails(@PathVariable Long id) {
-        RecipeDto recipe = recipeService.getRecipe(id);
+        RecipeDto recipe = recipeService.getDetailedRecipe(id);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
