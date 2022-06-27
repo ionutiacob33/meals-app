@@ -21,12 +21,14 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeIngredientService recipeIngredientService;
     private final RecipeMapper recipeMapper;
+    private final AuthService authService;
 
     public Recipe addRecipe(RecipeDto recipeDto) {
         Recipe recipe = new Recipe();
         if (recipeDto.getId() != null) {
             recipe.setId(recipeDto.getId());
         }
+        recipe.setUser(authService.getAuthenticatedUser());
         recipe.setTitle(recipeDto.getTitle());
         recipe.setDescription(recipeDto.getDescription());
         recipe.setImageUrl(recipeDto.getImageUrl());
@@ -67,10 +69,10 @@ public class RecipeService {
     }
 
     public List<RecipeDto> getAllRecipes() {
-        return recipeRepository.findAll().stream().map(recipe -> getRecipe(recipe.getId())).collect(Collectors.toList());
+        return recipeRepository.findAll().stream().map(recipe -> getDetailedRecipe(recipe.getId())).collect(Collectors.toList());
     }
 
-    public RecipeDto getRecipe(Long id) {
+    public RecipeDto getDetailedRecipe(Long id) {
         RecipeDto detailedRecipe = new RecipeDto();
         Recipe recipe = recipeRepository.getById(id);
         detailedRecipe.setId(recipe.getId());
@@ -92,4 +94,10 @@ public class RecipeService {
         return true;
     }
 
+    public List<RecipeDto> getRecipesOfCurrentUser() {
+        return recipeRepository.findByUser(authService.getAuthenticatedUser())
+                .stream()
+                .map(recipe -> getDetailedRecipe(recipe.getId()))
+                .collect(Collectors.toList());
+    }
 }

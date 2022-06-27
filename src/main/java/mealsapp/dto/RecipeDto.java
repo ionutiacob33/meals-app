@@ -12,6 +12,7 @@ import java.util.List;
 public class RecipeDto {
     private Long id;
     private Long apiId;
+    private Long userId;
     private String title;
     private String description;
     private List<RecipeIngredientDto> recipeIngredients;
