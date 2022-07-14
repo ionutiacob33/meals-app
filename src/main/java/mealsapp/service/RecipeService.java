@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import mealsapp.dto.RecipeDto;
 import mealsapp.dto.RecipeIngredientDto;
 import mealsapp.dto.StepDto;
+import mealsapp.error.GenericException;
 import mealsapp.mapper.RecipeMapper;
 import mealsapp.model.*;
 import mealsapp.repository.*;
@@ -25,12 +26,12 @@ public class RecipeService {
     private final RecipeMapper recipeMapper;
     private final AuthService authService;
 
-    public Recipe addRecipe(RecipeDto recipeDto) {
+    public RecipeDto addRecipe(RecipeDto recipeDto) {
         Recipe recipe = new Recipe();
         if (recipeDto.getId() != null) {
             recipe.setId(recipeDto.getId());
         }
-        recipe.setUser(authService.getAuthenticatedUser());
+        recipe.setUserId(authService.getAuthenticatedUser().getId());
         recipe.setTitle(recipeDto.getTitle());
         recipe.setDescription(recipeDto.getDescription());
         recipe.setImageUrl(recipeDto.getImageUrl());
@@ -40,7 +41,7 @@ public class RecipeService {
         recipe.setProtein(recipeDto.getProtein());
         recipe.setFat(recipeDto.getFat());
 
-        recipeRepository.save(recipe);
+        recipe = recipeRepository.save(recipe);
         List<RecipeIngredient> recipeIngredients = recipeMapper
                 .mapIngredientsDtoToModel(recipeDto.getRecipeIngredients(), recipe);
         recipeIngredientService.add(recipeIngredients);
@@ -48,11 +49,11 @@ public class RecipeService {
                 .mapStepsDtoToModel(recipeDto.getRecipeSteps(), recipe);
         recipeStepService.add(recipeSteps);
 
-        return recipe;
+        return getDetailedRecipe(recipe.getId());
     }
 
-    public List<Recipe> addRecipes(List<RecipeDto> recipeDtos) {
-        List<Recipe> recipes = new ArrayList<>();
+    public List<RecipeDto> addRecipes(List<RecipeDto> recipeDtos) {
+        List<RecipeDto> recipes = new ArrayList<>();
 
         for (RecipeDto recipeDto : recipeDtos) {
             recipes.add(addRecipe(recipeDto));
@@ -65,12 +66,19 @@ public class RecipeService {
         Recipe recipe = recipeRepository.getById(recipeId);
         recipe.setTitle(recipeDto.getTitle());
         recipe.setDescription(recipeDto.getDescription());
-        recipeRepository.save(recipe);
-        recipeIngredientService.deleteByRecipeId(recipeId);
+        recipe.setImageUrl(recipeDto.getImageUrl());
+        recipe.setApiId(recipeDto.getApiId());
+        recipe.setCalories(recipeDto.getCalories());
+        recipe.setCarbs(recipeDto.getCarbs());
+        recipe.setProtein(recipeDto.getProtein());
+        recipe.setFat(recipeDto.getFat());
+        recipe = recipeRepository.save(recipe);
 
+        recipeIngredientService.deleteByRecipeId(recipeId);
         List<RecipeIngredient> recipeIngredients = recipeMapper.mapIngredientsDtoToModel(recipeDto.getRecipeIngredients(), recipe);
         recipeIngredientService.add(recipeIngredients);
 
+        recipeStepService.deleteByRecipeId(recipeId);
         List<RecipeStep> recipeSteps = recipeMapper.mapStepsDtoToModel(recipeDto.getRecipeSteps(), recipe);
         recipeStepService.add(recipeSteps);
 
@@ -110,7 +118,7 @@ public class RecipeService {
     }
 
     public List<RecipeDto> getRecipesOfCurrentUser() {
-        return recipeRepository.findByUser(authService.getAuthenticatedUser())
+        return recipeRepository.findByUserId(authService.getAuthenticatedUser().getId())
                 .stream()
                 .map(recipe -> getDetailedRecipe(recipe.getId()))
                 .collect(Collectors.toList());

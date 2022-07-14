@@ -14,8 +14,14 @@ public class StepService {
 
     private final StepRepository stepRepository;
 
-    public Step addStep(Step step) {
-        stepRepository.save(step);
+    public Step addStep(int count, String description) {
+        Step step = stepRepository.findByCountAndDescription(count, description);
+        if (step == null) {
+            step = new Step();
+            step.setCount(count);
+            step.setDescription(description);
+            stepRepository.save(step);
+        }
         return step;
     }
 

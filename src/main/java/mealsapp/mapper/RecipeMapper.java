@@ -61,7 +61,7 @@ public class RecipeMapper {
         Step step = new Step();
         step.setCount(stepDto.getCount());
         step.setDescription(stepDto.getDescription());
-        recipeStep.setStep(stepService.addStep(step));
+        recipeStep.setStep(stepService.addStep(step.getCount(), step.getDescription()));
 
         return recipeStep;
     }
