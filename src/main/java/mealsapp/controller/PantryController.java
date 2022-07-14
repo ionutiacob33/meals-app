@@ -64,6 +64,20 @@ public class PantryController {
         );
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<Response> getIngredientsOfCurrentUser() {
+        List<PantryIngredientDto> pantryIngredients = pantryIngredientService.getIngredientsOfCurrentUser();
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(now())
+                        .data(Map.of("pantryIngredients", pantryIngredients))
+                        .message("Pantry ingredients for current user retrieved successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Response> deleteIngredient(@PathVariable Long id) {
         return ResponseEntity.ok(
