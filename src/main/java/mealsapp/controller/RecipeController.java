@@ -23,7 +23,7 @@ public class RecipeController {
 
     @PostMapping
     public ResponseEntity<Response> addRecipe(@RequestBody RecipeDto recipeDto) {
-        Recipe recipe = recipeService.addRecipe(recipeDto);
+        RecipeDto recipe = recipeService.addRecipe(recipeDto);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
@@ -37,7 +37,7 @@ public class RecipeController {
 
     @PutMapping("/multiple")
     public ResponseEntity<Response> addRecipes(@RequestBody List<RecipeDto> recipeDtos) {
-        List<Recipe> recipes = recipeService.addRecipes(recipeDtos);
+        List<RecipeDto> recipes = recipeService.addRecipes(recipeDtos);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())

@@ -21,10 +21,7 @@ public class Recipe {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
-
+    private Long userId;
     private Long apiId;
     private String title;
     private String description;

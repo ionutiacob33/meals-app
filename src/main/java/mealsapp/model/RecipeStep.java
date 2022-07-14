@@ -22,7 +22,7 @@ public class RecipeStep {
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipe recipe;
 
-    @ManyToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "step_id", referencedColumnName = "id")
     private Step step;
 }
