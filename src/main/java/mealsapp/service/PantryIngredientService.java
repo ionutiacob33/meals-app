@@ -32,6 +32,7 @@ public class PantryIngredientService {
             pantryIngredient.setQuantity(quantity);
         } else {
             pantryIngredient = new PantryIngredient();
+            pantryIngredient.setUserId(authService.getAuthenticatedUser().getId());
             pantryIngredient.setIngredient(pantryIngredientMap.getIngredient());
             pantryIngredient.setUnit(pantryIngredientMap.getUnit());
             pantryIngredient.setQuantity(pantryIngredientMap.getQuantity());
@@ -64,7 +65,7 @@ public class PantryIngredientService {
 
     public boolean deleteIngredient(Long id) {
         PantryIngredient pantryIngredient = pantryIngredientRepository.getById(id);
-        Long userId = pantryIngredient.getUser().getId();
+        Long userId = pantryIngredient.getUserId();
         Long authUserId = authService.getAuthenticatedUser().getId();
         if (userId != authUserId) {
             throw new GenericException("User can only delete its own pantry ingredients");

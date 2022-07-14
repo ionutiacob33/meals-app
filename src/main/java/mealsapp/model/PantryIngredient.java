@@ -19,9 +19,7 @@ public class PantryIngredient {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    private Long userId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "ingredient_id", referencedColumnName = "id")

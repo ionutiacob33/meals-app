@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PantryIngredientDto {
     private Long id;
+    private Long userId;
     private String ingredient;
     private String unit;
     private Double quantity;

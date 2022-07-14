@@ -22,6 +22,8 @@ public class PantryMapper {
 
     public PantryIngredientDto mapToDto(PantryIngredient pantryIngredient) {
         PantryIngredientDto pantryIngredientDto = new PantryIngredientDto();
+        pantryIngredientDto.setId(pantryIngredient.getId());
+        pantryIngredientDto.setUserId(pantryIngredient.getUserId());
         pantryIngredientDto.setIngredient(pantryIngredient.getIngredient().getName());
         pantryIngredientDto.setUnit(pantryIngredient.getUnit().getName());
         pantryIngredientDto.setQuantity(pantryIngredient.getQuantity().getAmount());
@@ -31,7 +33,7 @@ public class PantryMapper {
     public PantryIngredient mapToModel(PantryIngredientDto pantryIngredientDto) {
         PantryIngredient pantryIngredient = new PantryIngredient();
 
-        pantryIngredient.setUser(authService.getAuthenticatedUser());
+        pantryIngredient.setUserId(authService.getAuthenticatedUser().getId());
         pantryIngredient.setId(pantryIngredientDto.getId());
 
         Ingredient ingredient = ingredientService.addIngredient(pantryIngredientDto.getIngredient());
