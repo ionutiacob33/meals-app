@@ -3,6 +3,9 @@ package mealsapp.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mealsapp.model.ingredient.Name;
+import mealsapp.model.ingredient.Amount;
+import mealsapp.model.ingredient.Unit;
 
 import javax.persistence.*;
 
@@ -24,15 +27,15 @@ public class PantryIngredient {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
-    private Ingredient ingredient;
+    @JoinColumn(name = "name_id", referencedColumnName = "id")
+    private Name name;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "unit_id", referencedColumnName = "id")
     private Unit unit;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "quantity_id", referencedColumnName = "id")
-    private Quantity quantity;
+    @JoinColumn(name = "amount_id", referencedColumnName = "id")
+    private Amount amount;
 
 }

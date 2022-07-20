@@ -1,13 +1,19 @@
 package mealsapp.mapper;
 
 import lombok.AllArgsConstructor;
-import mealsapp.dto.RecipeIngredientDto;
+import mealsapp.dto.IngredientDto;
 import mealsapp.dto.StepDto;
 import mealsapp.model.*;
-import mealsapp.service.IngredientService;
-import mealsapp.service.QuantityService;
-import mealsapp.service.StepService;
-import mealsapp.service.UnitService;
+import mealsapp.model.ingredient.Name;
+import mealsapp.model.ingredient.Amount;
+import mealsapp.model.ingredient.Ingredient;
+import mealsapp.model.ingredient.Unit;
+import mealsapp.model.step.RecipeStep;
+import mealsapp.model.step.Step;
+import mealsapp.service.ingredient.NameService;
+import mealsapp.service.ingredient.AmountService;
+import mealsapp.service.step.StepService;
+import mealsapp.service.ingredient.UnitService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,32 +25,32 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RecipeMapper {
 
-    private final IngredientService ingredientService;
+    private final NameService nameService;
     private final UnitService unitService;
-    private final QuantityService quantityService;
+    private final AmountService amountService;
     private final StepService stepService;
 
-    public List<RecipeIngredient> mapIngredientsDtoToModel(List<RecipeIngredientDto> recipeIngredientDtos, Recipe recipe) {
-        return recipeIngredientDtos.stream()
-                .map(recipeIngredientDto -> createIngredientModelFromDto(recipeIngredientDto, recipe))
+    public List<Ingredient> mapIngredientsDtoToModel(List<IngredientDto> ingredientDtos, Recipe recipe) {
+        return ingredientDtos.stream()
+                .map(ingredientDto -> createIngredientModelFromDto(ingredientDto, recipe))
                 .collect(Collectors.toList());
     }
 
-    public RecipeIngredient createIngredientModelFromDto(RecipeIngredientDto recipeIngredientDto, Recipe recipe) {
-        RecipeIngredient recipeIngredient = new RecipeIngredient();
-        recipeIngredient.setRecipe(recipe);
-        recipeIngredient.setId(recipeIngredientDto.getId());
+    public Ingredient createIngredientModelFromDto(IngredientDto ingredientDto, Recipe recipe) {
+        Ingredient ingredient = new Ingredient();
+        ingredient.setRecipe(recipe);
+        ingredient.setId(ingredientDto.getId());
 
-        Ingredient ingredient = ingredientService.addIngredient(recipeIngredientDto.getIngredient());
-        recipeIngredient.setIngredient(ingredient);
+        Name name = nameService.addName(ingredientDto.getName());
+        ingredient.setName(name);
 
-        Unit unit = unitService.addUnit(recipeIngredientDto.getUnit());
-        recipeIngredient.setUnit(unit);
+        Unit unit = unitService.addUnit(ingredientDto.getUnit());
+        ingredient.setUnit(unit);
 
-        Quantity quantity = quantityService.addQuantity(recipeIngredientDto.getQuantity());
-        recipeIngredient.setQuantity(quantity);
+        Amount amount = amountService.addQuantity(ingredientDto.getAmount());
+        ingredient.setAmount(amount);
 
-        return recipeIngredient;
+        return ingredient;
     }
 
     public List<RecipeStep> mapStepsDtoToModel(List<StepDto> recipeSteps, Recipe recipe) {
@@ -66,15 +72,15 @@ public class RecipeMapper {
         return recipeStep;
     }
 
-    public RecipeIngredientDto mapIngredientToDto(RecipeIngredient recipeIngredient) {
-        RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
+    public IngredientDto mapIngredientToDto(Ingredient ingredient) {
+        IngredientDto ingredientDto = new IngredientDto();
 
-        recipeIngredientDto.setId(recipeIngredient.getId());
-        recipeIngredientDto.setIngredient(recipeIngredient.getIngredient().getName());
-        recipeIngredientDto.setUnit(recipeIngredient.getUnit().getName());
-        recipeIngredientDto.setQuantity(recipeIngredient.getQuantity().getAmount());
+        ingredientDto.setId(ingredient.getId());
+        ingredientDto.setName(ingredient.getName().getName());
+        ingredientDto.setUnit(ingredient.getUnit().getUnit());
+        ingredientDto.setAmount(ingredient.getAmount().getAmount());
 
-        return recipeIngredientDto;
+        return ingredientDto;
     }
 
     public StepDto mapStepToDto(RecipeStep recipeStep) {

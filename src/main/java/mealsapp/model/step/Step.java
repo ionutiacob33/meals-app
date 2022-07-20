@@ -1,4 +1,4 @@
-package mealsapp.model;
+package mealsapp.model.step;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,11 +14,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ingredient {
-
+public class Step {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private String name;
+    private Integer count;
+    private String description;
 }

@@ -1,6 +1,6 @@
 package mealsapp.repository;
 
-import mealsapp.model.RecipeStep;
+import mealsapp.model.step.RecipeStep;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

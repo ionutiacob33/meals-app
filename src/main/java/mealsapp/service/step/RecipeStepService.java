@@ -1,7 +1,7 @@
-package mealsapp.service;
+package mealsapp.service.step;
 
 import lombok.AllArgsConstructor;
-import mealsapp.model.RecipeStep;
+import mealsapp.model.step.RecipeStep;
 import mealsapp.repository.RecipeStepRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

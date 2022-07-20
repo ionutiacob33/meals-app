@@ -1,8 +1,9 @@
-package mealsapp.model;
+package mealsapp.model.step;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mealsapp.model.Recipe;
 
 import javax.persistence.*;
 

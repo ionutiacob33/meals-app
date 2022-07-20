@@ -2,12 +2,15 @@ package mealsapp.service;
 
 import lombok.AllArgsConstructor;
 import mealsapp.dto.RecipeDto;
-import mealsapp.dto.RecipeIngredientDto;
+import mealsapp.dto.IngredientDto;
 import mealsapp.dto.StepDto;
-import mealsapp.error.GenericException;
 import mealsapp.mapper.RecipeMapper;
 import mealsapp.model.*;
+import mealsapp.model.ingredient.Ingredient;
+import mealsapp.model.step.RecipeStep;
 import mealsapp.repository.*;
+import mealsapp.service.ingredient.IngredientService;
+import mealsapp.service.step.RecipeStepService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +24,7 @@ import java.util.stream.Collectors;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
-    private final RecipeIngredientService recipeIngredientService;
+    private final IngredientService ingredientService;
     private final RecipeStepService recipeStepService;
     private final RecipeMapper recipeMapper;
     private final AuthService authService;
@@ -42,9 +45,9 @@ public class RecipeService {
         recipe.setFat(recipeDto.getFat());
 
         recipe = recipeRepository.save(recipe);
-        List<RecipeIngredient> recipeIngredients = recipeMapper
-                .mapIngredientsDtoToModel(recipeDto.getRecipeIngredients(), recipe);
-        recipeIngredientService.add(recipeIngredients);
+        List<Ingredient> ingredients = recipeMapper
+                .mapIngredientsDtoToModel(recipeDto.getIngredients(), recipe);
+        ingredientService.add(ingredients);
         List<RecipeStep> recipeSteps = recipeMapper
                 .mapStepsDtoToModel(recipeDto.getRecipeSteps(), recipe);
         recipeStepService.add(recipeSteps);
@@ -74,9 +77,9 @@ public class RecipeService {
         recipe.setFat(recipeDto.getFat());
         recipe = recipeRepository.save(recipe);
 
-        recipeIngredientService.deleteByRecipeId(recipeId);
-        List<RecipeIngredient> recipeIngredients = recipeMapper.mapIngredientsDtoToModel(recipeDto.getRecipeIngredients(), recipe);
-        recipeIngredientService.add(recipeIngredients);
+        ingredientService.deleteByRecipeId(recipeId);
+        List<Ingredient> ingredients = recipeMapper.mapIngredientsDtoToModel(recipeDto.getIngredients(), recipe);
+        ingredientService.add(ingredients);
 
         recipeStepService.deleteByRecipeId(recipeId);
         List<RecipeStep> recipeSteps = recipeMapper.mapStepsDtoToModel(recipeDto.getRecipeSteps(), recipe);
@@ -94,14 +97,15 @@ public class RecipeService {
         Recipe recipe = recipeRepository.getById(id);
         detailedRecipe.setId(recipe.getId());
         detailedRecipe.setApiId(recipe.getApiId());
+        detailedRecipe.setUserId(authService.getAuthenticatedUser().getId());
         detailedRecipe.setTitle(recipe.getTitle());
         detailedRecipe.setDescription(recipe.getDescription());
         detailedRecipe.setImageUrl(recipe.getImageUrl());
-        List<RecipeIngredient> recipeIngredients = recipeIngredientService.getByRecipeId(id);
-        List<RecipeIngredientDto> recipeIngredientsDto = recipeIngredients.stream()
+        List<Ingredient> ingredients = ingredientService.getByRecipeId(id);
+        List<IngredientDto> recipeIngredientsDto = ingredients.stream()
                 .map(recipeMapper::mapIngredientToDto)
                 .toList();
-        detailedRecipe.setRecipeIngredients(recipeIngredientsDto);
+        detailedRecipe.setIngredients(recipeIngredientsDto);
         List<RecipeStep> recipeSteps = recipeStepService.getByRecipeId(id);
         List<StepDto> recipeStepsDto = recipeSteps.stream()
                 .map(recipeMapper::mapStepToDto)
@@ -111,7 +115,7 @@ public class RecipeService {
     }
 
     public boolean deleteRecipe(Long id) {
-        recipeIngredientService.deleteByRecipeId(id);
+        ingredientService.deleteByRecipeId(id);
         recipeStepService.deleteByRecipeId(id);
         recipeRepository.deleteById(id);
         return true;
