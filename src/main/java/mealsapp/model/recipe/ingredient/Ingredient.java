@@ -1,9 +1,9 @@
-package mealsapp.model.step;
+package mealsapp.model.recipe.ingredient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mealsapp.model.Recipe;
+import mealsapp.model.recipe.Recipe;
 
 import javax.persistence.*;
 
@@ -14,7 +14,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeStep {
+public class Ingredient {
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -23,7 +24,16 @@ public class RecipeStep {
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipe recipe;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "step_id", referencedColumnName = "id")
-    private Step step;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "name_id", referencedColumnName = "id")
+    private Name name;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "unit_id", referencedColumnName = "id")
+    private Unit unit;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "amount_id", referencedColumnName = "id")
+    private Amount amount;
+
 }

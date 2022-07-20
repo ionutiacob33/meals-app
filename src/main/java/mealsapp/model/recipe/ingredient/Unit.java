@@ -1,4 +1,4 @@
-package mealsapp.model.ingredient;
+package mealsapp.model.recipe.ingredient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -3,9 +3,9 @@ package mealsapp.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mealsapp.model.ingredient.Name;
-import mealsapp.model.ingredient.Amount;
-import mealsapp.model.ingredient.Unit;
+import mealsapp.model.recipe.ingredient.Name;
+import mealsapp.model.recipe.ingredient.Amount;
+import mealsapp.model.recipe.ingredient.Unit;
 
 import javax.persistence.*;
 

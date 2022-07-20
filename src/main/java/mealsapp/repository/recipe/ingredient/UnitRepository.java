@@ -1,6 +1,6 @@
-package mealsapp.repository.ingredient;
+package mealsapp.repository.recipe.ingredient;
 
-import mealsapp.model.ingredient.Unit;
+import mealsapp.model.recipe.ingredient.Unit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UnitRepository extends JpaRepository<Unit, Long> {

@@ -1,8 +1,8 @@
-package mealsapp.service.ingredient;
+package mealsapp.service.recipe.ingredient;
 
 import lombok.AllArgsConstructor;
-import mealsapp.model.ingredient.Unit;
-import mealsapp.repository.ingredient.UnitRepository;
+import mealsapp.model.recipe.ingredient.Unit;
+import mealsapp.repository.recipe.ingredient.UnitRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

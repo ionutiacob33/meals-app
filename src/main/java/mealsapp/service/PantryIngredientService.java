@@ -5,9 +5,9 @@ import mealsapp.dto.PantryIngredientDto;
 import mealsapp.error.GenericException;
 import mealsapp.mapper.PantryMapper;
 import mealsapp.model.PantryIngredient;
-import mealsapp.model.ingredient.Amount;
+import mealsapp.model.recipe.ingredient.Amount;
 import mealsapp.repository.PantryIngredientRepository;
-import mealsapp.service.ingredient.AmountService;
+import mealsapp.service.recipe.ingredient.AmountService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

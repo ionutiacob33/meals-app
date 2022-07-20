@@ -1,8 +1,8 @@
 package mealsapp.repository;
 
-import mealsapp.model.ingredient.Name;
+import mealsapp.model.recipe.ingredient.Name;
 import mealsapp.model.PantryIngredient;
-import mealsapp.model.ingredient.Unit;
+import mealsapp.model.recipe.ingredient.Unit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

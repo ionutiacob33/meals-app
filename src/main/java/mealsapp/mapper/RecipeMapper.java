@@ -1,19 +1,20 @@
 package mealsapp.mapper;
 
 import lombok.AllArgsConstructor;
+import mealsapp.dto.CookingTimeDto;
 import mealsapp.dto.IngredientDto;
 import mealsapp.dto.StepDto;
-import mealsapp.model.*;
-import mealsapp.model.ingredient.Name;
-import mealsapp.model.ingredient.Amount;
-import mealsapp.model.ingredient.Ingredient;
-import mealsapp.model.ingredient.Unit;
-import mealsapp.model.step.RecipeStep;
-import mealsapp.model.step.Step;
-import mealsapp.service.ingredient.NameService;
-import mealsapp.service.ingredient.AmountService;
-import mealsapp.service.step.StepService;
-import mealsapp.service.ingredient.UnitService;
+import mealsapp.model.recipe.CookingTime;
+import mealsapp.model.recipe.ingredient.Name;
+import mealsapp.model.recipe.ingredient.Amount;
+import mealsapp.model.recipe.ingredient.Ingredient;
+import mealsapp.model.recipe.ingredient.Unit;
+import mealsapp.model.recipe.Recipe;
+import mealsapp.model.recipe.Step;
+import mealsapp.service.recipe.ingredient.NameService;
+import mealsapp.service.recipe.ingredient.AmountService;
+import mealsapp.service.recipe.StepService;
+import mealsapp.service.recipe.ingredient.UnitService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public class RecipeMapper {
                 .collect(Collectors.toList());
     }
 
-    public Ingredient createIngredientModelFromDto(IngredientDto ingredientDto, Recipe recipe) {
+    private Ingredient createIngredientModelFromDto(IngredientDto ingredientDto, Recipe recipe) {
         Ingredient ingredient = new Ingredient();
         ingredient.setRecipe(recipe);
         ingredient.setId(ingredientDto.getId());
@@ -53,23 +54,20 @@ public class RecipeMapper {
         return ingredient;
     }
 
-    public List<RecipeStep> mapStepsDtoToModel(List<StepDto> recipeSteps, Recipe recipe) {
-        return recipeSteps.stream()
+    public List<Step> mapStepsDtoToModel(List<StepDto> steps, Recipe recipe) {
+        return steps.stream()
                 .map(stepDto -> createStepModelFromDto(stepDto, recipe))
                 .collect(Collectors.toList());
     }
 
-    public RecipeStep createStepModelFromDto(StepDto stepDto, Recipe recipe) {
-        RecipeStep recipeStep = new RecipeStep();
-        recipeStep.setRecipe(recipe);
-        recipeStep.setId(stepDto.getId());
-
+    private Step createStepModelFromDto(StepDto stepDto, Recipe recipe) {
         Step step = new Step();
+        step.setId(stepDto.getId());
+        step.setRecipe(recipe);
         step.setCount(stepDto.getCount());
         step.setDescription(stepDto.getDescription());
-        recipeStep.setStep(stepService.addStep(step.getCount(), step.getDescription()));
 
-        return recipeStep;
+        return step;
     }
 
     public IngredientDto mapIngredientToDto(Ingredient ingredient) {
@@ -83,9 +81,8 @@ public class RecipeMapper {
         return ingredientDto;
     }
 
-    public StepDto mapStepToDto(RecipeStep recipeStep) {
+    public StepDto mapStepToDto(Step step) {
         StepDto stepDto = new StepDto();
-        Step step = recipeStep.getStep();
 
         stepDto.setId(step.getId());
         stepDto.setCount(step.getCount());
@@ -94,4 +91,32 @@ public class RecipeMapper {
         return stepDto;
     }
 
+    public List<CookingTime> mapCookingTimesDtoToModel(List<CookingTimeDto> cookingTimes, Recipe recipe) {
+        return cookingTimes.stream()
+                .map(cookingTimeDto -> createCookingTimeModelFromDto(cookingTimeDto, recipe))
+                .collect(Collectors.toList());
+    }
+
+    private CookingTime createCookingTimeModelFromDto(CookingTimeDto cookingTimeDto, Recipe recipe) {
+        CookingTime cookingTime = new CookingTime();
+
+        cookingTime.setId(cookingTimeDto.getId());
+        cookingTime.setRecipe(recipe);
+        cookingTime.setTitle(cookingTimeDto.getTitle());
+        cookingTime.setMinutes(cookingTimeDto.getMinutes());
+        cookingTime.setHours(cookingTimeDto.getHours());
+
+        return cookingTime;
+    }
+
+    public CookingTimeDto mapCookingTimeToDto(CookingTime cookingTime) {
+        CookingTimeDto cookingTimeDto = new CookingTimeDto();
+
+        cookingTimeDto.setId(cookingTime.getId());
+        cookingTimeDto.setTitle(cookingTime.getTitle());
+        cookingTimeDto.setMinutes(cookingTime.getMinutes());
+        cookingTimeDto.setHours(cookingTime.getHours());
+
+        return cookingTimeDto;
+    }
 }

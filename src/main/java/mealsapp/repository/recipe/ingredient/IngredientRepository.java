@@ -1,6 +1,6 @@
-package mealsapp.repository.ingredient;
+package mealsapp.repository.recipe.ingredient;
 
-import mealsapp.model.ingredient.Ingredient;
+import mealsapp.model.recipe.ingredient.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
