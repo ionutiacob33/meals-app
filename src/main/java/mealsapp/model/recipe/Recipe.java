@@ -25,8 +25,10 @@ public class Recipe {
 
     private Long userId;
     private String title;
-    private String description;
     private String imageUrl;
+
+    @Lob
+    private String description;
 
     @OneToMany(mappedBy = "recipe")
     private List<Ingredient> ingredients;

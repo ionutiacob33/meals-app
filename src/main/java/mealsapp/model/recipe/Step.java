@@ -3,7 +3,6 @@ package mealsapp.model.recipe;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mealsapp.model.recipe.Recipe;
 
 import javax.persistence.*;
 
@@ -19,10 +18,13 @@ public class Step {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Lob
+    private String description;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipe recipe;
 
     private Integer count;
-    private String description;
+
 }
