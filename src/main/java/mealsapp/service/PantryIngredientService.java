@@ -5,8 +5,9 @@ import mealsapp.dto.PantryIngredientDto;
 import mealsapp.error.GenericException;
 import mealsapp.mapper.PantryMapper;
 import mealsapp.model.PantryIngredient;
-import mealsapp.model.Quantity;
+import mealsapp.model.recipe.ingredient.Amount;
 import mealsapp.repository.PantryIngredientRepository;
+import mealsapp.service.recipe.ingredient.AmountService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,22 +20,22 @@ public class PantryIngredientService {
 
     private final PantryIngredientRepository pantryIngredientRepository;
     private final PantryMapper pantryMapper;
-    private final QuantityService quantityService;
+    private final AmountService amountService;
     private final AuthService authService;
 
     public PantryIngredientDto addIngredient(PantryIngredientDto pantryIngredientDto) {
         PantryIngredient pantryIngredientMap = pantryMapper.mapToModel(pantryIngredientDto);
         PantryIngredient pantryIngredient = pantryIngredientRepository
-                .findByIngredientAndUnit(pantryIngredientMap.getIngredient(), pantryIngredientMap.getUnit());
+                .findByNameAndUnit(pantryIngredientMap.getName(), pantryIngredientMap.getUnit());
 
         if (pantryIngredient != null) {
-            Quantity quantity = quantityService.incrementQuantity(pantryIngredient.getQuantity(), pantryIngredientMap.getQuantity());
-            pantryIngredient.setQuantity(quantity);
+            Amount amount = amountService.incrementAmount(pantryIngredient.getAmount(), pantryIngredientMap.getAmount());
+            pantryIngredient.setAmount(amount);
         } else {
             pantryIngredient = new PantryIngredient();
-            pantryIngredient.setIngredient(pantryIngredientMap.getIngredient());
+            pantryIngredient.setName(pantryIngredientMap.getName());
             pantryIngredient.setUnit(pantryIngredientMap.getUnit());
-            pantryIngredient.setQuantity(pantryIngredientMap.getQuantity());
+            pantryIngredient.setAmount(pantryIngredientMap.getAmount());
         }
         pantryIngredientRepository.save(pantryIngredient);
 
@@ -45,16 +46,17 @@ public class PantryIngredientService {
         PantryIngredient pantryIngredient = pantryIngredientRepository.getById(id);
         PantryIngredient pantryIngredientMap = pantryMapper.mapToModel(pantryIngredientDto);
 
-        pantryIngredient.setIngredient(pantryIngredientMap.getIngredient());
+        pantryIngredient.setName(pantryIngredientMap.getName());
         pantryIngredient.setUnit(pantryIngredientMap.getUnit());
-        pantryIngredient.setQuantity(pantryIngredientMap.getQuantity());
+        pantryIngredient.setAmount(pantryIngredientMap.getAmount());
 
         pantryIngredientRepository.save(pantryIngredient);
 
         return pantryIngredientDto;
     }
 
-    public List<PantryIngredientDto> getIngredients(Long userId) {
+    public List<PantryIngredientDto> getIngredientsOfCurrentUser() {
+        Long userId = authService.getAuthenticatedUser().getId();
         List<PantryIngredient> pantryIngredients = pantryIngredientRepository.findByUserId(userId);
 
         return pantryIngredients.stream()

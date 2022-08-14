@@ -1,4 +1,4 @@
-package mealsapp.model;
+package mealsapp.model.recipe.ingredient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Quantity {
+public class Amount {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

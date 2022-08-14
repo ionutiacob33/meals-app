@@ -2,9 +2,9 @@ package mealsapp.controller;
 
 import lombok.AllArgsConstructor;
 import mealsapp.dto.RecipeDto;
-import mealsapp.model.Recipe;
+import mealsapp.model.recipe.Recipe;
 import mealsapp.model.Response;
-import mealsapp.service.RecipeService;
+import mealsapp.service.recipe.RecipeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

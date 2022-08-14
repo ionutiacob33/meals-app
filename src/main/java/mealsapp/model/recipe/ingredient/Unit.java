@@ -1,4 +1,4 @@
-package mealsapp.model;
+package mealsapp.model.recipe.ingredient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,5 +20,5 @@ public class Unit {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private String name;
+    private String unit;
 }

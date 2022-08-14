@@ -11,15 +11,14 @@ import java.util.List;
 @NoArgsConstructor
 public class RecipeDto {
     private Long id;
-    private Long apiId;
     private Long userId;
     private String title;
     private String description;
-    private List<RecipeIngredientDto> recipeIngredients;
-    private List<StepDto> recipeSteps;
+    private List<IngredientDto> ingredients;
+    private List<StepDto> steps;
+    private List<CookingTimeDto> cookingTime;
     private String imageUrl;
-    private Integer calories;
-    private Integer protein;
-    private Integer fat;
-    private Integer carbs;
+    private String source;
+    private String url;
+    private Integer yeald;
 }

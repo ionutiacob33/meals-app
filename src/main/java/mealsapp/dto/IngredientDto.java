@@ -3,16 +3,13 @@ package mealsapp.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mealsapp.model.Ingredient;
-import mealsapp.model.Quantity;
-import mealsapp.model.Unit;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeIngredientDto {
+public class IngredientDto {
     private Long id;
-    private String ingredient;
+    private String name;
     private String unit;
-    private Double quantity;
+    private Double amount;
 }

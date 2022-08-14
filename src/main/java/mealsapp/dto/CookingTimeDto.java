@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PantryIngredientDto {
+public class CookingTimeDto {
     private Long id;
-    private String name;
-    private String unit;
-    private Double amount;
+    private String title;
+    private Integer minutes;
+    private Integer hours;
 }

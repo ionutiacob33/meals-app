@@ -1,13 +1,15 @@
-package mealsapp.model;
+package mealsapp.model.recipe;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mealsapp.model.recipe.ingredient.Ingredient;
 
 import javax.persistence.*;
 
-import static javax.persistence.FetchType.LAZY;
+import java.util.List;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -22,13 +24,21 @@ public class Recipe {
     private Long id;
 
     private Long userId;
-    private Long apiId;
     private String title;
-    private String description;
     private String imageUrl;
-    private Integer calories;
-    private Integer protein;
-    private Integer fat;
-    private Integer carbs;
+
+    @Lob
+    private String description;
+
+    @OneToMany(mappedBy = "recipe")
+    private List<Ingredient> ingredients;
+    @OneToMany(mappedBy = "recipe")
+    private List<Step> steps;
+    @OneToMany(mappedBy = "recipe")
+    private List<CookingTime> cookingTimes;
+
+    private String source;
+    private String url;
+    private Integer yeald;
 
 }
