@@ -50,14 +50,14 @@ public class PantryController {
         );
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Response> getIngredients(@PathVariable Long userId) {
-        List<PantryIngredientDto> pantryIngredients = pantryIngredientService.getIngredients(userId);
+    @GetMapping("/user")
+    public ResponseEntity<Response> getIngredients() {
+        List<PantryIngredientDto> pantryIngredients = pantryIngredientService.getIngredientsOfCurrentUser();
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
                         .data(Map.of("pantryIngredients", pantryIngredients))
-                        .message("Pantry ingredients for user " + userId + " retrieved successfully")
+                        .message("Pantry ingredients for the current user retrieved successfully")
                         .status(OK)
                         .statusCode(OK.value())
                         .build()

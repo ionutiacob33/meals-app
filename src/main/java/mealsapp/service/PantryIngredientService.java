@@ -55,7 +55,8 @@ public class PantryIngredientService {
         return pantryIngredientDto;
     }
 
-    public List<PantryIngredientDto> getIngredients(Long userId) {
+    public List<PantryIngredientDto> getIngredientsOfCurrentUser() {
+        Long userId = authService.getAuthenticatedUser().getId();
         List<PantryIngredient> pantryIngredients = pantryIngredientRepository.findByUserId(userId);
 
         return pantryIngredients.stream()
