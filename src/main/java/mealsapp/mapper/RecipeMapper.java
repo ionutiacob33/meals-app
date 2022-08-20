@@ -48,7 +48,7 @@ public class RecipeMapper {
         Unit unit = unitService.addUnit(ingredientDto.getUnit());
         ingredient.setUnit(unit);
 
-        Amount amount = amountService.addQuantity(ingredientDto.getAmount());
+        Amount amount = amountService.addAmount(ingredientDto.getAmount());
         ingredient.setAmount(amount);
 
         return ingredient;

@@ -13,7 +13,7 @@ public class AmountService {
 
     private final AmountRepository amountRepository;
 
-    public Amount addQuantity(Double amount) {
+    public Amount addAmount(Double amount) {
         Amount amountData = amountRepository.findByAmount(amount);
         if (amountData == null) {
             amountData = new Amount();
