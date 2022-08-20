@@ -2,6 +2,7 @@ package mealsapp.service;
 
 import lombok.AllArgsConstructor;
 import mealsapp.dto.PantryIngredientDto;
+import mealsapp.dto.ShoppingListIngredientDto;
 import mealsapp.error.GenericException;
 import mealsapp.mapper.PantryMapper;
 import mealsapp.model.PantryIngredient;
@@ -24,9 +25,15 @@ public class PantryIngredientService {
     private final AuthService authService;
 
     public PantryIngredientDto addIngredient(PantryIngredientDto pantryIngredientDto) {
+        pantryIngredientDto = toLower(pantryIngredientDto);
+
         PantryIngredient pantryIngredientMap = pantryMapper.mapToModel(pantryIngredientDto);
         PantryIngredient pantryIngredient = pantryIngredientRepository
-                .findByNameAndUnit(pantryIngredientMap.getName(), pantryIngredientMap.getUnit());
+                .findByUserAndNameAndUnit(
+                        authService.getAuthenticatedUser(),
+                        pantryIngredientMap.getName(),
+                        pantryIngredientMap.getUnit()
+                );
 
         if (pantryIngredient != null) {
             Amount amount = amountService.incrementAmount(pantryIngredient.getAmount(), pantryIngredientMap.getAmount());
@@ -43,6 +50,8 @@ public class PantryIngredientService {
     }
 
     public PantryIngredientDto editIngredient(Long id, PantryIngredientDto pantryIngredientDto) {
+        pantryIngredientDto = toLower(pantryIngredientDto);
+
         PantryIngredient pantryIngredient = pantryIngredientRepository.getById(id);
         PantryIngredient pantryIngredientMap = pantryMapper.mapToModel(pantryIngredientDto);
 
@@ -68,11 +77,24 @@ public class PantryIngredientService {
         PantryIngredient pantryIngredient = pantryIngredientRepository.getById(id);
         Long userId = pantryIngredient.getUser().getId();
         Long authUserId = authService.getAuthenticatedUser().getId();
+
         if (userId != authUserId) {
             throw new GenericException("User can only delete its own pantry ingredients");
         }
+
         pantryIngredientRepository.deleteById(id);
+
         return true;
+    }
+
+    private PantryIngredientDto toLower(PantryIngredientDto pantryIngredientDto) {
+        String lowerName = pantryIngredientDto.getName().toLowerCase();
+        String lowerUnit = pantryIngredientDto.getUnit().toLowerCase();
+
+        pantryIngredientDto.setName(lowerName);
+        pantryIngredientDto.setUnit(lowerUnit);
+
+        return pantryIngredientDto;
     }
 
 }

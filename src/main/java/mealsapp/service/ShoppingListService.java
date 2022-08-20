@@ -25,9 +25,15 @@ public class ShoppingListService {
     private final AuthService authService;
 
     public ShoppingListIngredientDto addIngredient(ShoppingListIngredientDto shoppingListIngredientDto) {
+        shoppingListIngredientDto = toLower(shoppingListIngredientDto);
+
         ShoppingListIngredient shoppingListIngredientMap = shoppingListMapper.mapToModel(shoppingListIngredientDto);
         ShoppingListIngredient shoppingListIngredient = shoppingListRepository
-                .findByNameAndUnit(shoppingListIngredientMap.getName(), shoppingListIngredientMap.getUnit());
+                .findByUserAndNameAndUnit(
+                        authService.getAuthenticatedUser(),
+                        shoppingListIngredientMap.getName(),
+                        shoppingListIngredientMap.getUnit()
+                );
 
         if (shoppingListIngredient != null) {
             Amount amount = amountService.incrementAmount(shoppingListIngredient.getAmount(), shoppingListIngredientMap.getAmount());
@@ -64,6 +70,8 @@ public class ShoppingListService {
     }
 
     public ShoppingListIngredientDto editIngredient(Long id, ShoppingListIngredientDto shoppingListIngredientDto) {
+        shoppingListIngredientDto = toLower(shoppingListIngredientDto);
+
         ShoppingListIngredient shoppingListIngredient = shoppingListRepository.getById(id);
         ShoppingListIngredient shoppingListIngredientMap = shoppingListMapper.mapToModel(shoppingListIngredientDto);
 
@@ -86,7 +94,18 @@ public class ShoppingListService {
         }
 
         shoppingListRepository.deleteById(id);
+
         return true;
+    }
+
+    private ShoppingListIngredientDto toLower(ShoppingListIngredientDto shoppingListIngredientDto) {
+        String lowerName = shoppingListIngredientDto.getName().toLowerCase();
+        String lowerUnit = shoppingListIngredientDto.getUnit().toLowerCase();
+
+        shoppingListIngredientDto.setName(lowerName);
+        shoppingListIngredientDto.setUnit(lowerUnit);
+
+        return shoppingListIngredientDto;
     }
 
 }
