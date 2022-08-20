@@ -43,7 +43,7 @@ public class PantryMapper {
         Unit unit = unitService.addUnit(pantryIngredientDto.getUnit());
         pantryIngredient.setUnit(unit);
 
-        Amount amount = amountService.addQuantity(pantryIngredientDto.getAmount());
+        Amount amount = amountService.addAmount(pantryIngredientDto.getAmount());
         pantryIngredient.setAmount(amount);
 
         return pantryIngredient;
