@@ -16,7 +16,7 @@ public class RecipeDto {
     private String description;
     private List<IngredientDto> ingredients;
     private List<StepDto> steps;
-    private List<CookingTimeDto> cookingTime;
+    private List<CookingTimeDto> cookingTimes;
     private String imageUrl;
     private String source;
     private String url;

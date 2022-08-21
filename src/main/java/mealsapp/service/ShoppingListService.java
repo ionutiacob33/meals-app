@@ -73,6 +73,11 @@ public class ShoppingListService {
         shoppingListIngredientDto = toLower(shoppingListIngredientDto);
 
         ShoppingListIngredient shoppingListIngredient = shoppingListRepository.getById(id);
+
+        if (shoppingListIngredient.getUser().getId() != authService.getAuthenticatedUser().getId()) {
+            throw new GenericException("User can only edit its own shopping list ingredients");
+        }
+
         ShoppingListIngredient shoppingListIngredientMap = shoppingListMapper.mapToModel(shoppingListIngredientDto);
 
         shoppingListIngredient.setName(shoppingListIngredientMap.getName());

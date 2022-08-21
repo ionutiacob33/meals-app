@@ -5,6 +5,7 @@ import mealsapp.dto.CookingTimeDto;
 import mealsapp.dto.RecipeDto;
 import mealsapp.dto.IngredientDto;
 import mealsapp.dto.StepDto;
+import mealsapp.error.GenericException;
 import mealsapp.mapper.RecipeMapper;
 import mealsapp.model.recipe.CookingTime;
 import mealsapp.model.recipe.Step;
@@ -52,7 +53,7 @@ public class RecipeService {
                 .mapStepsDtoToModel(recipeDto.getSteps(), recipe);
         stepService.add(steps);
         List<CookingTime> cookingTimes = recipeMapper
-                .mapCookingTimesDtoToModel(recipeDto.getCookingTime(), recipe);
+                .mapCookingTimesDtoToModel(recipeDto.getCookingTimes(), recipe);
         cookingTimeService.add(cookingTimes);
 
         recipe = recipeRepository.save(recipe);
@@ -71,6 +72,11 @@ public class RecipeService {
 
     public Recipe updateRecipe(Long recipeId, RecipeDto recipeDto) {
         Recipe recipe = recipeRepository.getById(recipeId);
+
+        if (recipe.getUserId() != authService.getAuthenticatedUser().getId()) {
+            throw new GenericException("User can only edit its own recipes");
+        }
+
         recipe.setTitle(recipeDto.getTitle());
         recipe.setDescription(recipeDto.getDescription());
         recipe.setImageUrl(recipeDto.getImageUrl());
@@ -88,7 +94,7 @@ public class RecipeService {
         stepService.add(steps);
 
         cookingTimeService.deleteByRecipeId(recipeId);
-        List<CookingTime> cookingTimes = recipeMapper.mapCookingTimesDtoToModel(recipeDto.getCookingTime(), recipe);
+        List<CookingTime> cookingTimes = recipeMapper.mapCookingTimesDtoToModel(recipeDto.getCookingTimes(), recipe);
         cookingTimeService.add(cookingTimes);
 
         return recipe;
@@ -107,6 +113,9 @@ public class RecipeService {
         detailedRecipe.setTitle(recipe.getTitle());
         detailedRecipe.setDescription(recipe.getDescription());
         detailedRecipe.setImageUrl(recipe.getImageUrl());
+        detailedRecipe.setSource(recipe.getSource());
+        detailedRecipe.setUrl(recipe.getUrl());
+        detailedRecipe.setYeald(recipe.getYeald());
 
         List<Ingredient> ingredients = ingredientService.getByRecipeId(id);
         List<IngredientDto> recipeIngredientsDto = ingredients.stream()
@@ -122,7 +131,7 @@ public class RecipeService {
         List<CookingTimeDto> cookingTimeDtos = cookingTimes.stream()
                 .map(recipeMapper::mapCookingTimeToDto)
                 .toList();
-        detailedRecipe.setCookingTime(cookingTimeDtos);
+        detailedRecipe.setCookingTimes(cookingTimeDtos);
 
         return detailedRecipe;
     }
