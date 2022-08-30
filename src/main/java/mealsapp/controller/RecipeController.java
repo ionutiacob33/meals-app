@@ -51,7 +51,7 @@ public class RecipeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Response> updateRecipe(@RequestBody RecipeDto recipeDto, @PathVariable Long id) {
-        Recipe recipe = recipeService.updateRecipe(id, recipeDto);
+        RecipeDto recipe = recipeService.updateRecipe(id, recipeDto);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())

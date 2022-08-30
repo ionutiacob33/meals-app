@@ -70,7 +70,7 @@ public class RecipeService {
         return recipes;
     }
 
-    public Recipe updateRecipe(Long recipeId, RecipeDto recipeDto) {
+    public RecipeDto updateRecipe(Long recipeId, RecipeDto recipeDto) {
         Recipe recipe = recipeRepository.getById(recipeId);
 
         if (recipe.getUserId() != authService.getAuthenticatedUser().getId()) {
@@ -97,7 +97,7 @@ public class RecipeService {
         List<CookingTime> cookingTimes = recipeMapper.mapCookingTimesDtoToModel(recipeDto.getCookingTimes(), recipe);
         cookingTimeService.add(cookingTimes);
 
-        return recipe;
+        return getDetailedRecipe(recipe.getId());
     }
 
     public List<RecipeDto> getAllRecipes() {
