@@ -71,7 +71,7 @@ public class AuthService {
                 user.getEmail(),
                 "Thank you for signing up to Meals App, " +
                         "please click on the below url to activate your account : " +
-                        "http://localhost:8080/api/auth/accountVerification/" + token
+                        "http://localhost:4200/accountVerification/" + token
         ));
         System.out.println(token);
 
