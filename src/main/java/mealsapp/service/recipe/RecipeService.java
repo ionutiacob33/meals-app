@@ -86,22 +86,29 @@ public class RecipeService {
         recipe = recipeRepository.save(recipe);
 
         ingredientService.deleteByRecipeId(recipeId);
-        List<Ingredient> ingredients = recipeMapper.mapIngredientsDtoToModel(recipeDto.getIngredients(), recipe);
+        List<Ingredient> ingredients =
+                recipeMapper.mapIngredientsDtoToModel(recipeDto.getIngredients(), recipe);
         ingredientService.add(ingredients);
 
         stepService.deleteByRecipeId(recipeId);
-        List<Step> steps = recipeMapper.mapStepsDtoToModel(recipeDto.getSteps(), recipe);
+        List<Step> steps =
+                recipeMapper.mapStepsDtoToModel(recipeDto.getSteps(), recipe);
         stepService.add(steps);
 
         cookingTimeService.deleteByRecipeId(recipeId);
-        List<CookingTime> cookingTimes = recipeMapper.mapCookingTimesDtoToModel(recipeDto.getCookingTimes(), recipe);
+        List<CookingTime> cookingTimes =
+                recipeMapper.mapCookingTimesDtoToModel(recipeDto.getCookingTimes(), recipe);
         cookingTimeService.add(cookingTimes);
 
         return getDetailedRecipe(recipe.getId());
     }
 
     public List<RecipeDto> getAllRecipes() {
-        return recipeRepository.findAll().stream().map(recipe -> getDetailedRecipe(recipe.getId())).collect(Collectors.toList());
+        return recipeRepository
+                .findAll()
+                .stream()
+                .map(recipe -> getDetailedRecipe(recipe.getId()))
+                .collect(Collectors.toList());
     }
 
     public RecipeDto getDetailedRecipe(Long id) {
@@ -145,7 +152,8 @@ public class RecipeService {
     }
 
     public List<RecipeDto> getRecipesOfCurrentUser() {
-        return recipeRepository.findByUserId(authService.getAuthenticatedUser().getId())
+        return recipeRepository
+                .findByUserId(authService.getAuthenticatedUser().getId())
                 .stream()
                 .map(recipe -> getDetailedRecipe(recipe.getId()))
                 .collect(Collectors.toList());

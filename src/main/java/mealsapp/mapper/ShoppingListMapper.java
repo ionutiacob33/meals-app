@@ -23,7 +23,8 @@ public class ShoppingListMapper {
     private final UnitService unitService;
     private final AmountService amountService;
 
-    public ShoppingListIngredientDto mapToDto(ShoppingListIngredient shoppingListIngredient) {
+    public ShoppingListIngredientDto mapToDto(
+            ShoppingListIngredient shoppingListIngredient) {
         ShoppingListIngredientDto shoppingListIngredientDto = new ShoppingListIngredientDto();
         shoppingListIngredientDto.setId(shoppingListIngredient.getId());
         shoppingListIngredientDto.setName(shoppingListIngredient.getName().getName());
@@ -33,7 +34,8 @@ public class ShoppingListMapper {
         return shoppingListIngredientDto;
     }
 
-    public ShoppingListIngredient mapToModel(ShoppingListIngredientDto shoppingListIngredientDto) {
+    public ShoppingListIngredient mapToModel(
+            ShoppingListIngredientDto shoppingListIngredientDto) {
         ShoppingListIngredient shoppingListIngredient = new ShoppingListIngredient();
 
         shoppingListIngredient.setId(shoppingListIngredientDto.getId());

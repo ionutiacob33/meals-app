@@ -1,7 +1,6 @@
 package mealsapp.controller;
 
 import lombok.AllArgsConstructor;
-import mealsapp.dto.PantryIngredientDto;
 import mealsapp.dto.ShoppingListIngredientDto;
 import mealsapp.model.Response;
 import mealsapp.service.ShoppingListService;
@@ -15,7 +14,7 @@ import java.util.Map;
 import static java.time.LocalDateTime.now;
 import static org.springframework.http.HttpStatus.OK;
 
-@Controller
+@RestController
 @RequestMapping("/api/shopping")
 @AllArgsConstructor
 public class ShoppingListController {
@@ -23,8 +22,10 @@ public class ShoppingListController {
     private final ShoppingListService shoppingListService;
 
     @PostMapping
-    public ResponseEntity<Response> addIngredient(@RequestBody ShoppingListIngredientDto shoppingListIngredientDto) {
-        ShoppingListIngredientDto shoppingListIngredient = shoppingListService.addIngredient(shoppingListIngredientDto);
+    public ResponseEntity<Response> addIngredient(
+            @RequestBody ShoppingListIngredientDto shoppingListIngredientDto) {
+        ShoppingListIngredientDto shoppingListIngredient =
+                shoppingListService.addIngredient(shoppingListIngredientDto);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
@@ -37,8 +38,10 @@ public class ShoppingListController {
     }
 
     @PostMapping("/multiple")
-    public ResponseEntity<Response> addIngredient(@RequestBody List<ShoppingListIngredientDto> shoppingListIngredientDtos) {
-        List<ShoppingListIngredientDto> shoppingListIngredients = shoppingListService.addIngredients(shoppingListIngredientDtos);
+    public ResponseEntity<Response> addIngredients(
+            @RequestBody List<ShoppingListIngredientDto> shoppingListIngredientDtos) {
+        List<ShoppingListIngredientDto> shoppingListIngredients =
+                shoppingListService.addIngredients(shoppingListIngredientDtos);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
@@ -52,8 +55,11 @@ public class ShoppingListController {
 
 
     @PutMapping("/{ingrId}")
-    public ResponseEntity<Response> editIngredient(@PathVariable Long ingrId, @RequestBody ShoppingListIngredientDto shoppingListIngredientDto) {
-        ShoppingListIngredientDto shoppingListIngredient = shoppingListService.editIngredient(ingrId, shoppingListIngredientDto);
+    public ResponseEntity<Response> editIngredient(
+            @PathVariable Long ingrId,
+            @RequestBody ShoppingListIngredientDto shoppingListIngredientDto) {
+        ShoppingListIngredientDto shoppingListIngredient =
+                shoppingListService.editIngredient(ingrId, shoppingListIngredientDto);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
@@ -67,7 +73,8 @@ public class ShoppingListController {
 
     @GetMapping("/user")
     public ResponseEntity<Response> getIngredients() {
-        List<ShoppingListIngredientDto> shoppingListIngredients = shoppingListService.getIngredientsOfCurrentUser();
+        List<ShoppingListIngredientDto> shoppingListIngredients =
+                shoppingListService.getIngredientsOfCurrentUser();
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())

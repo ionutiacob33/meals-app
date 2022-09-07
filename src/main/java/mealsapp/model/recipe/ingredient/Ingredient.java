@@ -15,7 +15,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ingredient {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -35,5 +34,4 @@ public class Ingredient {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "amount_id", referencedColumnName = "id")
     private Amount amount;
-
 }

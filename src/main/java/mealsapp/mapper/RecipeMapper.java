@@ -31,13 +31,18 @@ public class RecipeMapper {
     private final AmountService amountService;
     private final StepService stepService;
 
-    public List<Ingredient> mapIngredientsDtoToModel(List<IngredientDto> ingredientDtos, Recipe recipe) {
+    public List<Ingredient> mapIngredientsDtoToModel(
+            List<IngredientDto> ingredientDtos, Recipe recipe) {
         return ingredientDtos.stream()
-                .map(ingredientDto -> createIngredientModelFromDto(ingredientDto, recipe))
+                .map(
+                        ingredientDto ->
+                                createIngredientModelFromDto(ingredientDto, recipe)
+                )
                 .collect(Collectors.toList());
     }
 
-    private Ingredient createIngredientModelFromDto(IngredientDto ingredientDto, Recipe recipe) {
+    private Ingredient createIngredientModelFromDto(
+            IngredientDto ingredientDto, Recipe recipe) {
         Ingredient ingredient = new Ingredient();
         ingredient.setRecipe(recipe);
         ingredient.setId(ingredientDto.getId());
@@ -54,13 +59,15 @@ public class RecipeMapper {
         return ingredient;
     }
 
-    public List<Step> mapStepsDtoToModel(List<StepDto> steps, Recipe recipe) {
+    public List<Step> mapStepsDtoToModel(
+            List<StepDto> steps, Recipe recipe) {
         return steps.stream()
                 .map(stepDto -> createStepModelFromDto(stepDto, recipe))
                 .collect(Collectors.toList());
     }
 
-    private Step createStepModelFromDto(StepDto stepDto, Recipe recipe) {
+    private Step createStepModelFromDto(
+            StepDto stepDto, Recipe recipe) {
         Step step = new Step();
         step.setId(stepDto.getId());
         step.setRecipe(recipe);
@@ -70,7 +77,8 @@ public class RecipeMapper {
         return step;
     }
 
-    public IngredientDto mapIngredientToDto(Ingredient ingredient) {
+    public IngredientDto mapIngredientToDto(
+            Ingredient ingredient) {
         IngredientDto ingredientDto = new IngredientDto();
 
         ingredientDto.setId(ingredient.getId());
@@ -81,7 +89,8 @@ public class RecipeMapper {
         return ingredientDto;
     }
 
-    public StepDto mapStepToDto(Step step) {
+    public StepDto mapStepToDto(
+            Step step) {
         StepDto stepDto = new StepDto();
 
         stepDto.setId(step.getId());
@@ -91,13 +100,17 @@ public class RecipeMapper {
         return stepDto;
     }
 
-    public List<CookingTime> mapCookingTimesDtoToModel(List<CookingTimeDto> cookingTimes, Recipe recipe) {
+    public List<CookingTime> mapCookingTimesDtoToModel(
+            List<CookingTimeDto> cookingTimes, Recipe recipe) {
         return cookingTimes.stream()
-                .map(cookingTimeDto -> createCookingTimeModelFromDto(cookingTimeDto, recipe))
+                .map(
+                        cookingTimeDto -> createCookingTimeModelFromDto(cookingTimeDto, recipe)
+                )
                 .collect(Collectors.toList());
     }
 
-    private CookingTime createCookingTimeModelFromDto(CookingTimeDto cookingTimeDto, Recipe recipe) {
+    private CookingTime createCookingTimeModelFromDto(
+            CookingTimeDto cookingTimeDto, Recipe recipe) {
         CookingTime cookingTime = new CookingTime();
 
         cookingTime.setId(cookingTimeDto.getId());
@@ -109,7 +122,8 @@ public class RecipeMapper {
         return cookingTime;
     }
 
-    public CookingTimeDto mapCookingTimeToDto(CookingTime cookingTime) {
+    public CookingTimeDto mapCookingTimeToDto(
+            CookingTime cookingTime) {
         CookingTimeDto cookingTimeDto = new CookingTimeDto();
 
         cookingTimeDto.setId(cookingTime.getId());

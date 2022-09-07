@@ -132,7 +132,8 @@ public class AuthService {
 
     private void fetchUserAndEnable(VerificationToken verificationToken) {
         String username = verificationToken.getUser().getUsername();
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new FieldNotFoundException("User not found with name - " + username));
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new FieldNotFoundException("User not found with name - " + username));
         user.setEnabled(true);
         userRepository.save(user);
     }

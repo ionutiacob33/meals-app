@@ -26,5 +26,4 @@ public class Step {
     private Recipe recipe;
 
     private Integer count;
-
 }

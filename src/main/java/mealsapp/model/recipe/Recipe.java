@@ -18,7 +18,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Recipe {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -40,5 +39,4 @@ public class Recipe {
     private String source;
     private String url;
     private Integer yeald;
-
 }

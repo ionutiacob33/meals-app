@@ -33,7 +33,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(
+            HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username;
         String password;
 
@@ -45,13 +46,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             throw new GenericException(e.getMessage());
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(username, password);
 
         return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+    protected void successfulAuthentication(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET.getBytes());
         String accessToken = JWT.create()

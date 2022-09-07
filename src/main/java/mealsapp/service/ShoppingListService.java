@@ -27,7 +27,8 @@ public class ShoppingListService {
     public ShoppingListIngredientDto addIngredient(ShoppingListIngredientDto shoppingListIngredientDto) {
         shoppingListIngredientDto = toLower(shoppingListIngredientDto);
 
-        ShoppingListIngredient shoppingListIngredientMap = shoppingListMapper.mapToModel(shoppingListIngredientDto);
+        ShoppingListIngredient shoppingListIngredientMap =
+                shoppingListMapper.mapToModel(shoppingListIngredientDto);
         ShoppingListIngredient shoppingListIngredient = shoppingListRepository
                 .findByUserAndNameAndUnit(
                         authService.getAuthenticatedUser(),
@@ -36,7 +37,11 @@ public class ShoppingListService {
                 );
 
         if (shoppingListIngredient != null) {
-            Amount amount = amountService.incrementAmount(shoppingListIngredient.getAmount(), shoppingListIngredientMap.getAmount());
+            Amount amount = amountService
+                    .incrementAmount(
+                            shoppingListIngredient.getAmount(),
+                            shoppingListIngredientMap.getAmount()
+                    );
             shoppingListIngredient.setAmount(amount);
         } else {
             shoppingListIngredient = new ShoppingListIngredient();
@@ -50,7 +55,8 @@ public class ShoppingListService {
         return shoppingListMapper.mapToDto(shoppingListIngredient);
     }
 
-    public List<ShoppingListIngredientDto> addIngredients(List<ShoppingListIngredientDto> shoppingListIngredientDtos) {
+    public List<ShoppingListIngredientDto> addIngredients(
+            List<ShoppingListIngredientDto> shoppingListIngredientDtos) {
         List<ShoppingListIngredientDto> shoppingListIngredients = new ArrayList<>();
 
         for (ShoppingListIngredientDto shoppingListIngredientDto : shoppingListIngredientDtos) {
@@ -62,14 +68,17 @@ public class ShoppingListService {
 
     public List<ShoppingListIngredientDto> getIngredientsOfCurrentUser() {
         Long userId = authService.getAuthenticatedUser().getId();
-        List<ShoppingListIngredient> shoppingListIngredients = shoppingListRepository.findByUserId(userId);
+        List<ShoppingListIngredient> shoppingListIngredients =
+                shoppingListRepository.findByUserId(userId);
 
         return shoppingListIngredients.stream()
                 .map(shoppingListMapper::mapToDto)
                 .toList();
     }
 
-    public ShoppingListIngredientDto editIngredient(Long id, ShoppingListIngredientDto shoppingListIngredientDto) {
+    public ShoppingListIngredientDto editIngredient(
+            Long id,
+            ShoppingListIngredientDto shoppingListIngredientDto) {
         shoppingListIngredientDto = toLower(shoppingListIngredientDto);
 
         ShoppingListIngredient shoppingListIngredient = shoppingListRepository.getById(id);
@@ -78,7 +87,8 @@ public class ShoppingListService {
             throw new GenericException("User can only edit its own shopping list ingredients");
         }
 
-        ShoppingListIngredient shoppingListIngredientMap = shoppingListMapper.mapToModel(shoppingListIngredientDto);
+        ShoppingListIngredient shoppingListIngredientMap =
+                shoppingListMapper.mapToModel(shoppingListIngredientDto);
 
         shoppingListIngredient.setName(shoppingListIngredientMap.getName());
         shoppingListIngredient.setUnit(shoppingListIngredientMap.getUnit());

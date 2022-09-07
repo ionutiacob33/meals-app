@@ -15,7 +15,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Unit {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
